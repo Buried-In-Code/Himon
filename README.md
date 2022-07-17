@@ -29,4 +29,16 @@ from himon.league_of_comic_geeks import LeagueofComicGeeks
 from himon.sqlite_cache import SQLiteCache
 
 session = LeagueofComicGeeks(api_key="API Key", client_id="Client Id", cache=SQLiteCache())
+
+# Search for Comic
+for search in session.search(search_term="Blackest Night"):
+    print(f"Search result: {search.publisher_name} - {search.series_name} - {search.title}")
+
+# Get Series by id
+series = session.series(series_id=100096)
+print(f"Series: {series.series_id} - {series.title}")
+
+# Get Comic by id
+comic = session.comic(comic_id=2710631)
+print(f"Comic: {comic.comic_id} - {comic.title}")
 ```
