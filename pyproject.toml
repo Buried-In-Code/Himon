@@ -1,0 +1,73 @@
+[tool.poetry]
+name = "Himon"
+version = "0.1.0"
+description = "A Python wrapper for League of Comic Geeks."
+license = "GPL-3.0-or-later"
+authors = ["Buried-In-Code <BuriedInCode@tuta.io>"]
+maintainers = ["Buried-In-Code <BuriedInCode@tuta.io>"]
+readme = "README.md"
+repository = "https://github.com/Buried-In-Code/Himon"
+packages = [
+    { include = "himon" }
+]
+include = [
+    { path = "tests", format = "sdist" }
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Natural Language :: English",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Internet",
+    "Typing :: Typed"
+]
+keywords=["comics", "comic", "metadata"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+pydantic = "^1.9.1"
+requests = "^2.28.1"
+ratelimit = "^2.2.1"
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^2.20.0"
+pytest = "^7.1.2"
+pytest-cov = "^3.0.0"
+tox = "^3.25.1"
+tox-pyenv = "^1.1.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.urls]
+"Issue Tracker" = "https://github.com/Buried-In-Code/Himon/issues"
+
+[tool.black]
+line-length = 100
+target-version = ['py37', 'py38', 'py39', 'py310']
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 100
+default_section = "THIRDPARTY"
+known_first_party = []
+known_third_party = []
+
+[tool.coverage.run]
+source = ["himon"]
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = ["--cov", "-x"]

@@ -1,0 +1,20 @@
+# =====Folders=====
+__pycache__/
+.pytest_cache/
+.tox/
+.venv/
+.vscode/
+.idea/
+logs/
+dist/
+
+# =====Files=====
+.coverage
+*.csv
+*.iml
+.python-version
+
+# =====Project=====
+collection-*.sqlite
+collection-*.csv
+settings.yaml

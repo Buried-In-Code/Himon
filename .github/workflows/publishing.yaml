@@ -1,0 +1,50 @@
+name: Publishing
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  pypi:
+    name: Publish to PyPI
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - '3.10'
+        os:
+          - ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      #----------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      #----------------------------------------------
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Setup poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      #----------------------------------------------
+      - name: Load cached venv
+        id: cached-venv
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ matrix.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      #----------------------------------------------
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+      - name: Install project
+        run: poetry install --no-interaction
+      #----------------------------------------------
+      - name: Set PyPI Token
+        run: poetry config pypi-token.pypi '${{ secrets.PYPI_TOKEN }}'
+      - name: Publish Project
+        run: poetry publish --build
