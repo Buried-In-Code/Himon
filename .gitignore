@@ -15,6 +15,3 @@ dist/
 .python-version
 
 # =====Project=====
-collection-*.sqlite
-collection-*.csv
-settings.yaml

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "Himon"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Python wrapper for League of Comic Geeks."
 license = "GPL-3.0-or-later"
 authors = ["Buried-In-Code <BuriedInCode@tuta.io>"]
