@@ -1,4 +1,4 @@
-# [Himon](<https://dc.fandom.com/wiki/Himon_(New_Earth)>)
+# Himon
 
 [![PyPI - Python](https://img.shields.io/pypi/pyversions/Himon.svg?logo=PyPI&label=Python&style=flat-square)](https://pypi.python.org/pypi/Himon/)
 [![PyPI - Status](https://img.shields.io/pypi/status/Himon.svg?logo=PyPI&label=Status&style=flat-square)](https://pypi.python.org/pypi/Himon/)
@@ -11,6 +11,7 @@
 
 [![Github - Contributors](https://img.shields.io/github/contributors/Buried-In-Code/Himon.svg?logo=Github&label=Contributors&style=flat-square)](https://github.com/Buried-In-Code/Himon/graphs/contributors)
 
+[![Read the Docs](https://img.shields.io/readthedocs/himon?label=Read-the-Docs&logo=Read-the-Docs&style=flat-square)](https://himon.readthedocs.io/en/latest/?badge=latest)
 [![Github Action - Code Analysis](https://img.shields.io/github/workflow/status/Buried-In-Code/Himon/Code%20Analysis?logo=Github-Actions&label=Code-Analysis&style=flat-square)](https://github.com/Buried-In-Code/Himon/actions/workflows/code-analysis.yaml)
 [![Github Action - Testing](https://img.shields.io/github/workflow/status/Buried-In-Code/Himon/Testing?logo=Github-Actions&label=Tests&style=flat-square)](https://github.com/Buried-In-Code/Himon/actions/workflows/testing.yaml)
 
@@ -54,3 +55,11 @@ print(f"Series: {series.series_id} - {series.title}")
 comic = session.comic(comic_id=2710631)
 print(f"Comic: {comic.comic_id} - {comic.title}")
 ```
+
+## Notes
+
+Who or what is Himon?
+
+> Himon is a citizen of New Genesis who secretly lives on the planet Apokolips, which is ruled by Darkseid.
+>
+> More details at [Himon (New Earth)](<https://dc.fandom.com/wiki/Himon_(New_Earth)>)
