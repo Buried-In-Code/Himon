@@ -33,13 +33,22 @@ class ComicModel(BaseModel):
 
 
 class Variant(ComicModel):
-    """The Variant object contains information for a variant comic."""
+    """
+    The Variant object contains information for a variant comic.
 
-    date_modified: datetime  #: Date and time when the Variant was last updated.
-    price: Optional[float] = None  #: Price of the Variant.
-    release_date: date = Field(alias="date_release")  #: The date the Variant was released.
-    title: str  #: Name/Title of the Variant.
-    variant_id: int = Field(alias="id")  #: Identifier used in League of Comic Geeks.
+    Attributes:
+        date_modified: Date and time when the Variant was last updated.
+        price: Price of the Variant.
+        release_date: The date the Variant was released.
+        title: Name/Title of the Variant.
+        variant_id: Identifier used by League of Comic Geeks.
+    """
+
+    date_modified: datetime
+    price: Optional[float] = None
+    release_date: date = Field(alias="date_release")
+    title: str
+    variant_id: int = Field(alias="id")
 
     @validator("price", pre=True)
     def validate_optional_float(cls, v):
@@ -48,16 +57,28 @@ class Variant(ComicModel):
 
 
 class KeyEvent(ComicModel):
-    """The KeyEvent object contains information for a key event."""
+    """
+    The KeyEvent object contains information for a key event.
 
-    character_id: int  #: Identifier used in League of Comic Geeks.
-    event_id: int = Field(alias="id")  #: Identifier used in League of Comic Geeks.
-    name: str  #: Name/Title of the Comic.
+    Attributes:
+        character_id: Identifier used by League of Comic Geeks.
+        event_id: Identifier used by League of Comic Geeks.
+        name: Name/Title of the Event.
+        note:
+        parent_name:
+        type:
+        type_id: Identifier used by League of Comic Geeks.
+        universe_name: Universe this Event took place in.
+    """
+
+    character_id: int
+    event_id: int = Field(alias="id")
+    name: str
     note: Optional[str] = None
-    parent_name: Optional[str] = None  # TODO: Unknown field
-    type: int  # TODO: How is it different to type_id?
-    type_id: int  #: Identifier used in League of Comic Geeks.
-    universe_name: str  #: Universe this key event took place in.
+    parent_name: Optional[str] = None  # Unknown field
+    type: int  # How is it different to type_id?
+    type_id: int
+    universe_name: str
 
     @validator("note", "parent_name", pre=True)
     def validate_optional_str(cls, v):
@@ -66,12 +87,20 @@ class KeyEvent(ComicModel):
 
 
 class Creator(ComicModel):
-    """The Creator object contains information for a creator."""
+    """
+    The Creator object contains information for a creator.
 
-    creator_id: int = Field(alias="id")  #: Identifier used in League of Comic Geeks.
-    name: str  #: Name/Title of Creator
-    role: str  #: Separated by ``,``.
-    role_id: str  #: Separated by ``,``.
+    Attributes:
+        creator_id: Identifier used by League of Comic Geeks.
+        name: Name/Title of the Creator.
+        role: List of roles the Creator has in the comic. Separated by `,`.
+        role_id: List of role ids the Creator has in the comic. Separated by `,`.
+    """
+
+    creator_id: int = Field(alias="id")
+    name: str
+    role: str
+    role_id: str
 
     @property
     def roles(self) -> Dict[int, str]:
@@ -85,20 +114,36 @@ class Creator(ComicModel):
 
 
 class Character(ComicModel):
-    """The Character object contains information for a character."""
+    """
+    The Character object contains information for a character.
 
-    character_id: int = Field(alias="id")  #: Identifier used by League of Comic Geeks.
-    date_added: datetime  #: Date and time when the Character was added.
-    date_modified: datetime  #: Date and time when the Character was last updated.
-    full_name: str  #: Full name of Character
+    Attributes:
+        character_id: Identifier used by League of Comic Geeks.
+        date_added: Date and time when the Character was added.
+        date_modified: Date and time when the Character was last updated.
+        full_name: Full name of Character
+        is_enabled:
+        name: Name/Alias of Character.
+        parent_id:
+        parent_name:
+        publisher_name: The publisher name of Character.
+        type_id:
+        universe_id: Universe id this Character is from.
+        universe_name: Universe name this Character is from.
+    """
+
+    character_id: int = Field(alias="id")
+    date_added: datetime
+    date_modified: datetime
+    full_name: str
     is_enabled: bool = Field(alias="enabled")
-    name: str  #: Name/Alias of Character
-    parent_id: Optional[int] = None  # TODO: Unknown field
-    parent_name: Optional[str] = None  # TODO: Unknown field
-    publisher_name: str  #: The publisher name of Character.
+    name: str
+    parent_id: Optional[int] = None  # Unknown field
+    parent_name: Optional[str] = None  # Unknown field
+    publisher_name: str
     type_id: int
-    universe_id: Optional[int] = None  #: Universe id this Character is from.
-    universe_name: Optional[str] = None  #: Universe name this Character is from.
+    universe_id: Optional[int] = None
+    universe_name: Optional[str] = None
 
     @validator("parent_name", "universe_name", pre=True)
     def validate_optional_str(cls, v):
@@ -117,37 +162,58 @@ class Character(ComicModel):
 
 
 class Comic(ComicModel):
-    """The Comic object contains information for a comic."""
+    """
+    The Comic object contains information for a comic.
 
-    characters: List[Character] = Field(default_factory=list)  #: List of Characters in the Comic.
-    collected_in: List[SearchResult] = Field(
-        default_factory=list
-    )  #: List of Comics this has been collected in.
-    comic_id: int = Field(alias="id")  #: Identifier used by League of Comic Geeks.
-    creators: List[Creator] = Field(
-        default_factory=list
-    )  #: List of Creators associated with the Comic.
-    date_added: datetime  #: Date and time when the Comic was added.
-    date_modified: datetime  #: Date and time when the Comic was last updated.
-    description: Optional[str] = None  #: Description of the Comic.
-    format: str  #: Type of Comic
+    Attributes:
+        characters: List of Characters in the Comic.
+        collected_in: List of Comics this has been collected in.
+        comic_id: Identifier used by League of Comic Geeks.
+        creators: List of Creators associated with the Comic
+        date_added: Date and time when the Comic was added.
+        date_modified: Date and time when the Comic was last updated.
+        description: Description of the Comic.
+        format: Type of Comic.
+        is_enabled:
+        is_nsfw: Comic has been marked as NSFW
+        is_variant: Comic has been marked as Variant
+        isbn: ISBN identifier
+        key_events: List of Key Events taken place in the Comic.
+        page_count: Count of pages in the Comic.
+        parent_id: If it is a variant comic, id of the original comic.
+        parent_title: If it is a variant comic, title of the origin comic.
+        price: Price of Comic
+        release_date: The date the Comic was released.
+        series: The series this Comic comes from.
+        sku: SKU identifier.
+        title: Name/Title of the Comic.
+        upc: UPC identifier.
+        variants: List of variants this Comic has.
+    """
+
+    characters: List[Character] = Field(default_factory=list)
+    collected_in: List[SearchResult] = Field(default_factory=list)
+    comic_id: int = Field(alias="id")
+    creators: List[Creator] = Field(default_factory=list)
+    date_added: datetime
+    date_modified: datetime
+    description: Optional[str] = None
+    format: str
     is_enabled: bool = Field(alias="enabled")
-    is_nsfw: bool = Field(alias="nsfw")  #: Comic has been marked as NSFW
-    is_variant: bool = Field(alias="variant")  #: Comic has been marked as Variant
-    isbn: Optional[int] = None  #: ISBN identifier
-    key_events: List[KeyEvent] = Field(
-        default_factory=list
-    )  #: List of Key Events taken place in the Comic.
-    page_count: int = Field(alias="pages")  #: Count of pages in the Comic
-    parent_id: Optional[int] = None  #: If it is a variant comic, Id of the original comic.
-    parent_title: Optional[str] = None  #: If it is a variant comic, Title of the original comic.
-    price: Optional[float] = None  #: Price of Comic
-    release_date: date = Field(alias="date_release")  #: The date the Comic was released.
-    series: Series  #: The series this Comic comes from
-    sku: str  #: SKU identifier
-    title: str  #: Name/Title of the Comic
-    upc: Optional[int] = None  #: UPC identifier
-    variants: List[Variant] = Field(default_factory=list)  #: List of variants this Comic has.
+    is_nsfw: bool = Field(alias="nsfw")
+    is_variant: bool = Field(alias="variant")
+    isbn: Optional[int] = None
+    key_events: List[KeyEvent] = Field(default_factory=list)
+    page_count: int = Field(alias="pages")
+    parent_id: Optional[int] = None
+    parent_title: Optional[str] = None
+    price: Optional[float] = None
+    release_date: date = Field(alias="date_release")
+    series: Series
+    sku: str
+    title: str
+    upc: Optional[int] = None
+    variants: List[Variant] = Field(default_factory=list)
 
     def __init__(self, **data):
         if data["keys"]:
