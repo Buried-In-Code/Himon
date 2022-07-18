@@ -15,19 +15,34 @@ from himon.schemas import to_bool, to_optional_int, to_optional_str
 
 
 class Series(BaseModel):
-    """The Series object contains information for a series."""
+    """
+    The Series object contains information for a series.
 
-    date_added: datetime  #: Date and time when the Series was added.
-    date_modified: datetime  #: Date and time when the Series was last updated.
-    description: Optional[str] = None  #: Description of the Series
+    Attributes:
+        date_added: Date and time when the Series was added.
+        date_modified: Date and time when the Series was last updated.
+        description: Description of the Series.
+        is_enabled:
+        publisher_id: The publisher id of the Series.
+        publisher_name: The publisher name of the Series.
+        series_id: Identifier used by League of Comic Geeks.
+        title: Name/Title of the Series.
+        volume: Volume number.
+        year_begin: The year the Series started.
+        year_end: The year the Series ended.
+    """
+
+    date_added: datetime
+    date_modified: datetime
+    description: Optional[str] = None
     is_enabled: bool = Field(alias="enabled")
-    publisher_id: int  #: The publisher id of the Series.
-    publisher_name: str  #: The publisher name of the Series.
-    series_id: int = Field(alias="id")  #: Identifier used in League of Comic Geeks
-    title: str  #: Name/Title of the Series.
-    volume: Optional[int] = None  #: Volume number
-    year_begin: int  #: The year the Series started.
-    year_end: Optional[int] = None  #: The year the Series ended.
+    publisher_id: int
+    publisher_name: str
+    series_id: int = Field(alias="id")
+    title: str
+    volume: Optional[int] = None
+    year_begin: int
+    year_end: Optional[int] = None
 
     class Config:
         """Any extra fields will be ignored, strings will have start/end whitespace stripped."""
