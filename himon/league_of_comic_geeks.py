@@ -2,6 +2,7 @@
 The League of Comic Geeks module.
 
 This module provides the following classes:
+
 - LeagueofComicGeeks
 """
 import platform
@@ -35,7 +36,7 @@ class LeagueofComicGeeks:
 
     Attributes:
         headers (Dict[str, str]): Header used when requesting from League of Comic Geeks.
-        timeout: (int): How long requests will wait for a response (in seconds).
+        timeout (int): How long requests will wait for a response (in seconds).
         cache (Optional[SQLiteCache]): SQLiteCache to use if set.
     """
 

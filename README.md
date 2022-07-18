@@ -18,8 +18,20 @@ A [Python](https://www.python.org/) wrapper for [League of Comic Geeks](https://
 
 ## Installation
 
-```bash
-$ poetry add himon
+**Himon** requires >= 3.7.
+
+### Installing/Upgrading from PyPI
+
+To install the latest version from PyPI:
+
+```shell
+$ pip3 install -U --user himon
+```
+
+or via poetry:
+
+```shell
+$ poetry install himon
 ```
 
 ## Example Usage

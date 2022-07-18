@@ -1,0 +1,40 @@
+site_name: "Himon"
+site_url: "https://himon.readthedocs.io/en/latest/"
+repo_url: "https://github.com/Buried-In-Code/Himon"
+repo_name: "Github"
+site_description: "A Python wrapper for League of Comic Geeks."
+site_author: "Jonah Jackson"
+copyright: "GPL-3.0"
+
+theme:
+  name: "readthedocs"
+
+nav:
+  - Home: "index.md"
+  - himon:
+      - Package: "himon/__init__.md"
+      - exceptions: "himon/exceptions.md"
+      - league_of_comic_geeks: "himon/league_of_comic_geeks.md"
+      - sqlite_cache: "himon/sqlite_cache.md"
+  - himon.schemas:
+      - Package: "himon/schemas/__init__.md"
+      - comic: "himon/schemas/comic.md"
+      - search_result: "himon/schemas/search_result.md"
+      - series: "himon/schemas/series.md"
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_root_heading: True
+            show_root_full_path: False
+            # Docstrings
+            docstring_style: google
+            line_length: 100
+            merge_init_into_class: True
+            # Additional
+            show_source: False
+  - include-markdown

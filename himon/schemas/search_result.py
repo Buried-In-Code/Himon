@@ -2,6 +2,7 @@
 The Search Result module.
 
 This module provides the following classes:
+
 - SearchResult
 """
 __all__ = ["SearchResult"]

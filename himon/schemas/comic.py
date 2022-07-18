@@ -2,6 +2,7 @@
 The Comic module.
 
 This module provides the following classes:
+
 - ComicModel
 - Variant
 - KeyEvent
