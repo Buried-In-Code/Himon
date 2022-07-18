@@ -1,8 +1,14 @@
+"""
+The League of Comic Geeks module.
+
+This module provides the following classes:
+- LeagueofComicGeeks
+"""
 import platform
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlencode
 
-from pydantic import parse_obj_as
+from pydantic import ValidationError, parse_obj_as
 from ratelimit import limits, sleep_and_retry
 from requests import get
 from requests.exceptions import ConnectionError, HTTPError, JSONDecodeError, ReadTimeout
@@ -18,6 +24,21 @@ MINUTE = 60
 
 
 class LeagueofComicGeeks:
+    """
+    Wrapper to allow calling League of Comic Geeks API endpoints.
+
+    Args:
+        api_key: User's API Key to access League of Comic Geeks.
+        client_id: User's Client Id to access League of Comic Geeks.
+        timeout: Set how long requests will wait for a response (in seconds).
+        cache: SQLiteCache to use if set.
+
+    Attributes:
+        headers (Dict[str, str]): Header used when requesting from League of Comic Geeks.
+        timeout: (int): How long requests will wait for a response (in seconds).
+        cache (Optional[SQLiteCache]): SQLiteCache to use if set.
+    """
+
     API_URL = "https://leagueofcomicgeeks.com/api"
 
     def __init__(
@@ -35,6 +56,19 @@ class LeagueofComicGeeks:
     @sleep_and_retry
     @limits(calls=20, period=MINUTE)
     def _perform_get_request(self, url: str, params: Dict[str, str] = None) -> Dict[str, Any]:
+        """
+        Make GET request to League of Comic Geeks.
+
+        Args:
+            url: The url to request information from.
+            params: Parameters to add to the request.
+        Returns:
+            Json response from League of Comic Geeks.
+        Raises:
+            ServiceError: If there is an issue with the request or response.
+            AuthenticationError:
+                If League of Comic Geeks returns with an invalid API Key or Client Id response.
+        """
         if params is None:
             params = {}
 
@@ -58,6 +92,19 @@ class LeagueofComicGeeks:
     def _get_request(
         self, endpoint: str, params: Dict[str, str] = None, skip_cache: bool = False
     ) -> Dict[str, Any]:
+        """
+        Check cache or make GET request to League of Comic Geeks.
+
+        Args:
+            endpoint: The endpoint to request information from.
+            params: Parameters to add to the request.
+        Returns:
+            Json response from League of Comic Geeks.
+        Raises:
+            ServiceError: If there is an issue with the request or response.
+            AuthenticationError:
+                If League of Comic Geeks returns with an invalid API Key or Client Id response.
+        """
         if params is None:
             params = {}
 
@@ -78,15 +125,54 @@ class LeagueofComicGeeks:
         return response
 
     def search(self, search_term: str) -> List[SearchResult]:
-        results = self._get_request("/search/format/json", params={"query": search_term})
-        return parse_obj_as(List[SearchResult], results)
+        """
+        Request a list of search results.
 
-    def series(self, series_id: int) -> Optional[Series]:
-        result = self._get_request("/series/format/json", params={"series_id": str(series_id)})
-        if "details" in result:
-            result = result["details"]
-        return parse_obj_as(Series, result)
+        Args:
+            search_term: Search query string
+        Returns:
+            A list of results.
+        Raises:
+            ServiceError: If there is an issue with validating the response.
+        """
+        try:
+            results = self._get_request("/search/format/json", params={"query": search_term})
+            return parse_obj_as(List[SearchResult], results)
+        except ValidationError as err:
+            raise ServiceError(err)
 
-    def comic(self, comic_id: int) -> Optional[Comic]:
-        result = self._get_request("/comic/format/json", params={"comic_id": str(comic_id)})
-        return parse_obj_as(Comic, result)
+    def series(self, series_id: int) -> Series:
+        """
+        Request data for a Series based on its id.
+
+        Args:
+            series_id: The Series id.
+        Returns:
+            A Series object.
+        Raises:
+            ServiceError: If there is an issue with validating the response.
+        """
+        try:
+            result = self._get_request("/series/format/json", params={"series_id": str(series_id)})
+            if "details" in result:
+                result = result["details"]
+            return parse_obj_as(Series, result)
+        except ValidationError as err:
+            raise ServiceError(err)
+
+    def comic(self, comic_id: int) -> Comic:
+        """
+        Request data for a Comic based on its id.
+
+        Args:
+            comic_id: The Comic id.
+        Returns:
+            A Comic object.
+        Raises:
+            ServiceError: If there is an issue with validating the response.
+        """
+        try:
+            result = self._get_request("/comic/format/json", params={"comic_id": str(comic_id)})
+            return parse_obj_as(Comic, result)
+        except ValidationError as err:
+            raise ServiceError(err)
