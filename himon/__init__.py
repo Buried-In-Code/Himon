@@ -1,5 +1,5 @@
 """himon package entry file."""
-__version__ = "0.2.0b0"
+__version__ = "0.2.0"
 __all__ = ["__version__", "get_cache_root"]
 
 from pathlib import Path
