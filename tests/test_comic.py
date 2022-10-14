@@ -33,3 +33,19 @@ def test_comic(session: LeagueofComicGeeks):
     assert result.title == "Blackest Night #1"
     assert result.upc == 76194128446000111
     assert len(result.variants) == 6
+
+
+def test_character_null_publisher(session: LeagueofComicGeeks):
+    """Test the comic endpoint with a comic that has a null character publisher name."""
+    result = session.comic(comic_id=4174173)
+    assert result is not None
+
+    assert result.characters[0].publisher_name is None
+
+
+def test_key_event_null_universe(session: LeagueofComicGeeks):
+    """Test the comic endpoint with a comic that has a null key event universe name."""
+    result = session.comic(comic_id=4174173)
+    assert result is not None
+
+    assert result.key_events[0].universe_name is None

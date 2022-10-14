@@ -45,5 +45,6 @@ jobs:
       #----------------------------------------------
       - name: Test with tox
         env:
-          COMICVINE_API_KEY: Testing-Key
+          LEAGUE_OF_COMIC_GEEKS__API_KEY: Api-Key
+          LEAGUE_OF_COMIC_GEEKS__CLIENT_ID: Client-Id
         run: pdm run tox -e py
