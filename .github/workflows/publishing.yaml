@@ -28,5 +28,9 @@ jobs:
       - name: Setup PDM
         run: pip install pdm
       #----------------------------------------------
+      - name: Build project
+        run: pdm build
+      - name: Install twine
+        run: pip install twine
       - name: Publish project
-        run: pdm publish -u __token__ -p ${{ secrets.PYPI_TOKEN }}
+        run: twine upload --username __token__ --password ${{ secrets.PYPI_TOKEN }} dist/*
