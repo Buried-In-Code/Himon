@@ -26,13 +26,13 @@ A [Python](https://www.python.org/) wrapper for [League of Comic Geeks](https://
 To install the latest version from PyPI:
 
 ```shell
-$ pip3 install -U --user himon
+$ pip install himon
 ```
 
-or via poetry:
+or via [PDM](https://pdm.fming.dev/2.1/):
 
 ```shell
-$ poetry install himon
+$ pdm add himon
 ```
 
 ## Example Usage
