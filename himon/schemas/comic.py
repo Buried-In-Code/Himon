@@ -3,14 +3,13 @@ The Comic module.
 
 This module provides the following classes:
 
-- ComicModel
 - Variant
 - KeyEvent
 - Creator
 - Character
 - Comic
 """
-__all__ = ["Comic", "ComicModel", "Character", "Creator", "KeyEvent", "Variant"]
+__all__ = ["Comic", "Character", "Creator", "KeyEvent", "Variant"]
 from datetime import date, datetime
 from typing import Dict, List, Optional
 
@@ -78,7 +77,7 @@ class KeyEvent(ComicModel):
     parent_name: Optional[str] = None  # Unknown field
     type: int  # How is it different to type_id?
     type_id: int
-    universe_name: str
+    universe_name: Optional[str] = None
 
     @validator("note", "parent_name", pre=True)
     def validate_optional_str(cls, v):
@@ -140,7 +139,7 @@ class Character(ComicModel):
     name: str
     parent_id: Optional[int] = None  # Unknown field
     parent_name: Optional[str] = None  # Unknown field
-    publisher_name: str
+    publisher_name: Optional[str] = None
     type_id: int
     universe_id: Optional[int] = None
     universe_name: Optional[str] = None

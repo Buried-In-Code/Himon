@@ -14,13 +14,13 @@ from himon.sqlite_cache import SQLiteCache
 @pytest.fixture(scope="session")
 def league_of_comic_geeks_api_key():
     """Set the League of Comic Geeks API key fixture."""
-    return os.getenv("LEAGUE_OF_COMIC_GEEKS_API_KEY", default="INVALID")
+    return os.getenv("LEAGUE_OF_COMIC_GEEKS__API_KEY", default="INVALID")
 
 
 @pytest.fixture(scope="session")
 def league_of_comic_geeks_client_id():
     """Set the League of Comic Geeks Client Id fixture."""
-    return os.getenv("LEAGUE_OF_COMIC_GEEKS_CLIENT_ID", default="INVALID")
+    return os.getenv("LEAGUE_OF_COMIC_GEEKS__CLIENT_ID", default="INVALID")
 
 
 @pytest.fixture(scope="session")
