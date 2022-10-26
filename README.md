@@ -21,21 +21,16 @@ A [Python](https://www.python.org/) wrapper for [League of Comic Geeks](https://
 
 ## Installation
 
-**Himon** requires >= 3.7.
+### PyPI
 
-### Installing/Upgrading from PyPI
+1. Make sure you have [Python](https://www.python.org/) installed: `python --version`
+2. Install the library from [PyPI](https://pypi.org/project/himon): `pip install himon`
 
-To install the latest version from PyPI:
+### Github
 
-```shell
-$ pip install himon
-```
-
-or via [PDM](https://pdm.fming.dev/2.1/):
-
-```shell
-$ pdm add himon
-```
+1. Make sure you have [Python](https://www.python.org/) installed: `python --version`
+2. Clone the repo: `git clone https://github.com/Buried-In-Code/Himon`
+3. Install the library: `pip install .`
 
 ## Example Usage
 
