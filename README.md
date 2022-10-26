@@ -60,3 +60,7 @@ Who or what is Himon?
 > Himon is a citizen of New Genesis who secretly lives on the planet Apokolips, which is ruled by Darkseid.
 >
 > More details at [Himon (New Earth)](<https://dc.fandom.com/wiki/Himon_(New_Earth)>)
+
+## Socials
+
+[![Social - Discord](https://img.shields.io/badge/Discord-The--DEV--Environment-7289DA?logo=Discord&style=for-the-badge)](https://discord.gg/nqGMeGg)
