@@ -31,7 +31,7 @@ trim_trailing_whitespace = false
 [*.py]
 indent_size = 4
 
-[*.xml]
+[{*.xml,*.xsd}]
 indent_size = 4
 indent_style = tab
 insert_final_newline = false

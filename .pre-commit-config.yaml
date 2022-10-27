@@ -4,8 +4,6 @@ repos:
     hooks:
       - id: pyupgrade
         args:
-          - --py3-plus
-          - --py36-plus
           - --py37-plus
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.16
@@ -52,10 +50,14 @@ repos:
     rev: 22.10.0
     hooks:
       - id: black
-#  - repo: https://github.com/PyCQA/bandit
-#    rev: 1.7.4
-#    hooks:
-#      - id: bandit
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.4
+    hooks:
+      - id: bandit
+        additional_dependencies:
+          - bandit[toml]
+        args:
+          - -c=pyproject.toml
   - repo: https://github.com/PyCQA/flake8
     rev: 5.0.4
     hooks:
