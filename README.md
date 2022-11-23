@@ -38,7 +38,12 @@ A [Python](https://www.python.org/) wrapper for [League of Comic Geeks](https://
 from himon.league_of_comic_geeks import LeagueofComicGeeks
 from himon.sqlite_cache import SQLiteCache
 
-session = LeagueofComicGeeks(api_key="API Key", client_id="Client Id", cache=SQLiteCache())
+access_token = None
+session = LeagueofComicGeeks(client_id="Client Id", client_secret="Client Secret", access_token=access_token, cache=SQLiteCache())
+
+# Generate an access token if not supplied
+if not access_token:
+  session.access_token = session.generate_access_token()
 
 # Search for Comic
 for search in session.search(search_term="Blackest Night"):
