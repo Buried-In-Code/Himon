@@ -41,6 +41,7 @@ from himon.sqlite_cache import SQLiteCache
 access_token = None
 session = LeagueofComicGeeks(client_id="Client Id", client_secret="Client Secret", access_token=access_token, cache=SQLiteCache())
 
+# Generate an access token if not supplied
 if not access_token:
   session.access_token = session.generate_access_token()
 
