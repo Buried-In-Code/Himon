@@ -45,6 +45,7 @@ jobs:
         run: pdm install -G test
       - name: Test with tox
         env:
-          LEAGUE_OF_COMIC_GEEKS__API_KEY: INVALID
           LEAGUE_OF_COMIC_GEEKS__CLIENT_ID: INVALID
+          LEAGUE_OF_COMIC_GEEKS__CLIENT_SECRET: INVALID
+          LEAGUE_OF_COMIC_GEEKS__ACCESS_TOKEN: INVALID
         run: pdm run tox -e py

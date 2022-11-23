@@ -60,7 +60,7 @@ Source = "https://github.com/Buried-In-Code/Himon"
 
 [tool.bandit]
 recursive = true
-skips = ["B101"]
+skips = ["B101", "B106"]
 
 [tool.black]
 line-length = 100
