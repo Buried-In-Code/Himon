@@ -43,20 +43,27 @@ class LeagueofComicGeeks:
     API_URL = "https://leagueofcomicgeeks.com/api"
 
     def __init__(
-        self, api_key: str, client_id: str, timeout: int = 30, cache: Optional[SQLiteCache] = None
+        self,
+        client_id: str,
+        client_secret: str,
+        access_token: Optional[str] = None,
+        timeout: int = 30,
+        cache: Optional[SQLiteCache] = None,
     ):
         self.headers = {
             "Accept": "application/json",
             "User-Agent": f"Himon/{__version__}/{platform.system()}: {platform.release()}",
-            "X-API-KEY": api_key,
             "X-API-CLIENT": client_id,
         }
         self.timeout = timeout
         self.cache = cache
 
+        self.client_secret = client_secret
+        self.access_token = access_token
+
     @sleep_and_retry
     @limits(calls=20, period=MINUTE)
-    def _perform_get_request(self, url: str, params: Dict[str, str] = None) -> Dict[str, Any]:
+    def _perform_json_get_request(self, url: str, params: Dict[str, str] = None) -> Dict[str, Any]:
         """
         Make GET request to League of Comic Geeks.
 
@@ -90,7 +97,7 @@ class LeagueofComicGeeks:
         except ReadTimeout:
             raise ServiceError("Service took too long to respond")
 
-    def _get_request(
+    def _json_get_request(
         self, endpoint: str, params: Dict[str, str] = None, skip_cache: bool = False
     ) -> Dict[str, Any]:
         """
@@ -99,6 +106,7 @@ class LeagueofComicGeeks:
         Args:
             endpoint: The endpoint to request information from.
             params: Parameters to add to the request.
+            skip_cache: Don't save or read from the cache.
         Returns:
             Json response from League of Comic Geeks.
         Raises:
@@ -118,12 +126,80 @@ class LeagueofComicGeeks:
             if cached_response:
                 return cached_response
 
-        response = self._perform_get_request(url=url, params=params)
+        response = self._perform_json_get_request(url=url, params=params)
 
         if self.cache and not skip_cache:
             self.cache.insert(cache_key, response)
 
         return response
+
+    @sleep_and_retry
+    @limits(calls=20, period=MINUTE)
+    def _perform_str_get_request(self, url: str, params: Dict[str, str] = None) -> str:
+        """
+        Make GET request to League of Comic Geeks, expecting a str response.
+
+        Args:
+            url: The url to request information from.
+            params: Parameters to add to the request.
+        Returns:
+            String response from League of Comic Geeks.
+        Raises:
+            ServiceError: If there is an issue with the request or response.
+            AuthenticationError:
+                If League of Comic Geeks returns with an invalid API Key or Client Id response.
+        """
+        if params is None:
+            params = {}
+
+        try:
+            response = get(url, params=params, headers=self.headers, timeout=self.timeout)
+            response.raise_for_status()
+            return response.json()
+        except ConnectionError:
+            raise ServiceError(f"Unable to connect to `{url}`")
+        except HTTPError as err:
+            if err.response.status_code == 403:
+                raise AuthenticationError("Invalid API Key")
+            if err.response.status_code == 404:
+                raise ServiceError("Unknown endpoint")
+            raise ServiceError(f"{err.response.status_code}: {err.response.text}")
+        except JSONDecodeError:
+            raise ServiceError(f"Unable to parse response from `{url}` as Json")
+        except ReadTimeout:
+            raise ServiceError("Service took too long to respond")
+
+    def _str_get_request(self, endpoint: str, params: Dict[str, str] = None) -> str:
+        """
+        Check cache or make GET request to League of Comic Geeks.
+
+        Args:
+            endpoint: The endpoint to request information from.
+            params: Parameters to add to the request.
+        Returns:
+            String response from League of Comic Geeks.
+        Raises:
+            ServiceError: If there is an issue with the request or response.
+            AuthenticationError:
+                If League of Comic Geeks returns with an invalid API Key or Client Id response.
+        """
+        if params is None:
+            params = {}
+
+        url = self.API_URL + endpoint
+        return self._perform_str_get_request(url=url, params=params)
+
+    def generate_access_token(self) -> str:
+        """
+        Request an access token.
+
+        Returns:
+            An access token.
+        Raises:
+            ServiceError: If there is an issue with the client id or secret.
+        """
+        self.headers["X-API-KEY"] = self.client_secret
+        return self._str_get_request("/authorize/format/json")
 
     def search(self, search_term: str) -> List[SearchResult]:
         """
@@ -137,7 +213,8 @@ class LeagueofComicGeeks:
             ServiceError: If there is an issue with validating the response.
         """
         try:
-            results = self._get_request("/search/format/json", params={"query": search_term})
+            self.headers["X-API-KEY"] = self.access_token
+            results = self._json_get_request("/search/format/json", params={"query": search_term})
             return parse_obj_as(List[SearchResult], results)
         except ValidationError as err:
             raise ServiceError(err)
@@ -154,7 +231,10 @@ class LeagueofComicGeeks:
             ServiceError: If there is an issue with validating the response.
         """
         try:
-            result = self._get_request("/series/format/json", params={"series_id": str(series_id)})
+            self.headers["X-API-KEY"] = self.access_token
+            result = self._json_get_request(
+                "/series/format/json", params={"series_id": str(series_id)}
+            )
             if "details" in result:
                 result = result["details"]
             return parse_obj_as(Series, result)
@@ -173,7 +253,10 @@ class LeagueofComicGeeks:
             ServiceError: If there is an issue with validating the response.
         """
         try:
-            result = self._get_request("/comic/format/json", params={"comic_id": str(comic_id)})
+            self.headers["X-API-KEY"] = self.access_token
+            result = self._json_get_request(
+                "/comic/format/json", params={"comic_id": str(comic_id)}
+            )
             return parse_obj_as(Comic, result)
         except ValidationError as err:
             raise ServiceError(err)

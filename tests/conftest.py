@@ -4,6 +4,7 @@ The conftest module.
 This module contains pytest fixtures.
 """
 import os
+from typing import Optional
 
 import pytest
 
@@ -12,24 +13,32 @@ from himon.sqlite_cache import SQLiteCache
 
 
 @pytest.fixture(scope="session")
-def league_of_comic_geeks_api_key():
-    """Set the League of Comic Geeks API key fixture."""
-    return os.getenv("LEAGUE_OF_COMIC_GEEKS__API_KEY", default="INVALID")
-
-
-@pytest.fixture(scope="session")
-def league_of_comic_geeks_client_id():
-    """Set the League of Comic Geeks Client Id fixture."""
+def client_id() -> str:
+    """Retrieve the Client Id from environment variables."""
     return os.getenv("LEAGUE_OF_COMIC_GEEKS__CLIENT_ID", default="INVALID")
 
 
 @pytest.fixture(scope="session")
-def session(
-    league_of_comic_geeks_api_key: str, league_of_comic_geeks_client_id: str
-) -> LeagueofComicGeeks:
+def client_secret() -> str:
+    """Retrieve the Client Secret from environment variables."""
+    return os.getenv("LEAGUE_OF_COMIC_GEEKS__CLIENT_SECRET", default="INVALID")
+
+
+@pytest.fixture(scope="session")
+def access_token() -> Optional[str]:
+    """Retrieve the Access Token from environment variables."""
+    return os.getenv("LEAGUE_OF_COMIC_GEEKS__ACCESS_TOKEN")
+
+
+@pytest.fixture(scope="session")
+def session(client_id: str, client_secret: str, access_token: Optional[str]) -> LeagueofComicGeeks:
     """Set the Himon session fixture."""
-    return LeagueofComicGeeks(
-        api_key=league_of_comic_geeks_api_key,
-        client_id=league_of_comic_geeks_client_id,
+    service = LeagueofComicGeeks(
+        client_id=client_id,
+        client_secret=client_secret,
+        access_token=access_token,
         cache=SQLiteCache("tests/cache.sqlite", expiry=None),
     )
+    if not access_token:
+        service.access_token = service.generate_access_token()
+    return service
