@@ -29,8 +29,9 @@ class LeagueofComicGeeks:
     Wrapper to allow calling League of Comic Geeks API endpoints.
 
     Args:
-        api_key: User's API Key to access League of Comic Geeks.
         client_id: User's Client Id to access League of Comic Geeks.
+        client_secret: User's Client Secret to access League of Comic Geeks.
+        access_token: User's Access Token to access League of Comic Geeks.
         timeout: Set how long requests will wait for a response (in seconds).
         cache: SQLiteCache to use if set.
 
@@ -38,6 +39,8 @@ class LeagueofComicGeeks:
         headers (Dict[str, str]): Header used when requesting from League of Comic Geeks.
         timeout (int): How long requests will wait for a response (in seconds).
         cache (Optional[SQLiteCache]): SQLiteCache to use if set.
+        client_secret (str): User's Client Secret to access League of Comic Geeks.
+        access_token (Optional[str]): User's Access Token to access League of Comic Geeks.
     """
 
     API_URL = "https://leagueofcomicgeeks.com/api"
