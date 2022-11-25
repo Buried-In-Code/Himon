@@ -15,13 +15,13 @@ from himon.sqlite_cache import SQLiteCache
 @pytest.fixture(scope="session")
 def client_id() -> str:
     """Retrieve the Client Id from environment variables."""
-    return os.getenv("LEAGUE_OF_COMIC_GEEKS__CLIENT_ID", default="INVALID")
+    return os.getenv("LEAGUE_OF_COMIC_GEEKS__CLIENT_ID", default="IGNORED")
 
 
 @pytest.fixture(scope="session")
 def client_secret() -> str:
     """Retrieve the Client Secret from environment variables."""
-    return os.getenv("LEAGUE_OF_COMIC_GEEKS__CLIENT_SECRET", default="INVALID")
+    return os.getenv("LEAGUE_OF_COMIC_GEEKS__CLIENT_SECRET", default="IGNORED")
 
 
 @pytest.fixture(scope="session")
