@@ -38,14 +38,12 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Setup PDM
-        run: pip install pdm
       #----------------------------------------------
       - name: Install project
-        run: pdm install -G test
+        run: pip install .[test]
       - name: Test with tox
         env:
-          LEAGUE_OF_COMIC_GEEKS__CLIENT_ID: INVALID
-          LEAGUE_OF_COMIC_GEEKS__CLIENT_SECRET: INVALID
-          LEAGUE_OF_COMIC_GEEKS__ACCESS_TOKEN: INVALID
-        run: pdm run tox -e py
+          LEAGUE_OF_COMIC_GEEKS__CLIENT_ID: IGNORED
+          LEAGUE_OF_COMIC_GEEKS__CLIENT_SECRET: IGNORED
+          LEAGUE_OF_COMIC_GEEKS__ACCESS_TOKEN: IGNORED
+        run: tox -e py

@@ -68,4 +68,4 @@ Who or what is Himon?
 
 ## Socials
 
-[![Social - Discord](https://img.shields.io/badge/Discord-The--DEV--Environment-7289DA?logo=Discord&style=for-the-badge)](https://discord.gg/nqGMeGg)
+[![Social - Discord](https://img.shields.io/discord/618581423070117932?color=7289DA&label=The-DEV-Environment&logo=discord&style=for-the-badge)](https://discord.gg/nqGMeGg)
