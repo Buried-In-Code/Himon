@@ -52,16 +52,16 @@ class Series(BaseModel):
         extra = Extra.ignore
 
     @validator("description", pre=True)
-    def validate_optional_str(cls, v):
+    def validate_optional_str(cls, v) -> Optional[str]:
         """Pydantic validator to convert a Str to None or return html stripped value."""
         return to_optional_str(v)
 
     @validator("is_enabled", pre=True)
-    def validate_bool(cls, v):
+    def validate_bool(cls, v) -> bool:
         """Pydantic validator to convert a Str 0/1 to a bool."""
         return to_bool(v)
 
     @validator("volume", "year_end", pre=True)
-    def validate_optional_int(cls, v):
+    def validate_optional_int(cls, v) -> Optional[int]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_int(v)
