@@ -15,9 +15,12 @@ def to_optional_int(v) -> Optional[int]:
     Return:
         Value mapped as None or value
     """
-    if not v or int(v) == 0:
+    try:
+        if not v or int(v) == 0:
+            return None
+        return int(v)
+    except ValueError:
         return None
-    return v
 
 
 def to_optional_float(v) -> Optional[float]:
@@ -31,9 +34,12 @@ def to_optional_float(v) -> Optional[float]:
     """
     if v:
         v = str(v).replace("..", ".")
-    if not v or float(v) == 0:
+    try:
+        if not v or float(v) == 0:
+            return None
+        return float(v)
+    except ValueError:
         return None
-    return v
 
 
 def to_bool(v) -> bool:

@@ -49,3 +49,11 @@ def test_key_event_null_universe(session: LeagueofComicGeeks):
     assert result is not None
 
     assert result.key_events[0].universe_name is None
+
+
+def test_upc_alpha_only(session: LeagueofComicGeeks):
+    """Test the comic endpoint with a comic that has an invalid character in the upc."""
+    result = session.comic(comic_id=6257084)
+    assert result is not None
+
+    assert result.upc is None
