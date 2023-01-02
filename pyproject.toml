@@ -4,7 +4,7 @@ requires = ["hatchling"]
 
 [project]
 authors = [
-  { name = "BuriedInCode", email = "BuriedInCode@tuta.io" }
+  {email = "BuriedInCode@tuta.io", name = "BuriedInCode"}
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -15,22 +15,22 @@ classifiers = [
   "Operating System :: MacOS",
   "Operating System :: Microsoft :: Windows",
   "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
   "Topic :: Internet",
   "Typing :: Typed"
 ]
 dependencies = [
   "pydantic >= 1.10.2",
-  "requests >= 2.28.1",
-  "ratelimit >= 2.2.1"
+  "ratelimit >= 2.2.1",
+  "requests >= 2.28.1"
 ]
 description = "A Python wrapper for League of Comic Geeks."
 dynamic = ["version"]
-keywords = ["comics", "comic", "metadata"]
+keywords = ["comic", "comics", "metadata"]
 license = "GPL-3.0-or-later"
 name = "Himon"
 readme = "README.md"
@@ -38,12 +38,12 @@ requires-python = ">= 3.7"
 
 [project.optional-dependencies]
 dev = [
-  "pre-commit >= 2.20.0",
+  "pre-commit >= 2.20.0"
 ]
 docs = [
   "mkdocs >= 1.4.2",
-  "mkdocstrings[python] >= 0.19.0",
-  "mkdocs-include-markdown-plugin >= 3.9.1"
+  "mkdocs-include-markdown-plugin >= 3.9.1",
+  "mkdocstrings[python] >= 0.19.0"
 ]
 test = [
   "pytest >= 7.2.0",
@@ -64,7 +64,7 @@ skips = ["B101", "B106"]
 
 [tool.black]
 line-length = 100
-target-version = ["py37", "py38", "py39", "py310", "py311"]
+target-version = ["py310", "py311", "py37", "py38", "py39"]
 
 [tool.coverage.report]
 show_missing = true
