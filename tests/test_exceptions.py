@@ -14,7 +14,7 @@ from himon.league_of_comic_geeks import LeagueofComicGeeks
 def test_unauthorized():
     """Test generating an AuthenticationError."""
     session = LeagueofComicGeeks(
-        client_id="Invalid", client_secret="Invalid", access_token=None, cache=None
+        client_id="Invalid", client_secret="Invalid", access_token=None, cache=None  # noqa: S106
     )
     with pytest.raises(AuthenticationError):
         session.comic(comic_id=1)
