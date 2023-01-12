@@ -41,9 +41,9 @@ jobs:
       #----------------------------------------------
       - name: Install project
         run: pip install .[test]
-      - name: Test with tox
+      - name: Test with pytest
         env:
           LEAGUE_OF_COMIC_GEEKS__CLIENT_ID: IGNORED
           LEAGUE_OF_COMIC_GEEKS__CLIENT_SECRET: IGNORED
           LEAGUE_OF_COMIC_GEEKS__ACCESS_TOKEN: IGNORED
-        run: tox -e py
+        run: pytest
