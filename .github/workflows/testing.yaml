@@ -13,8 +13,8 @@ on:
       - docs/**
 
 jobs:
-  tox:
-    name: Tox Tests
+  pytest:
+    name: Pytest tests
     strategy:
       fail-fast: false
       matrix:
