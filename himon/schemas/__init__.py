@@ -6,7 +6,7 @@ import re
 from typing import Optional
 
 
-def to_optional_int(v) -> Optional[int]:
+def to_optional_int(v: str) -> Optional[int]:
     """
     Convert a Str or 0 to None or return value.
 
@@ -23,7 +23,7 @@ def to_optional_int(v) -> Optional[int]:
         return None
 
 
-def to_optional_float(v) -> Optional[float]:
+def to_optional_float(v: str) -> Optional[float]:
     """
     Convert a Str or 0 to None or return value.
 
@@ -42,7 +42,7 @@ def to_optional_float(v) -> Optional[float]:
         return None
 
 
-def to_bool(v) -> bool:
+def to_bool(v: str) -> bool:
     """
     Convert a Str 0/1 to a bool.
 
@@ -60,7 +60,7 @@ def to_bool(v) -> bool:
     raise ValueError(f"Unknown bool value `{v}`.")
 
 
-def to_optional_str(v) -> Optional[str]:
+def to_optional_str(v: str) -> Optional[str]:
     """
     Convert a Str to None or return html stripped value.
 

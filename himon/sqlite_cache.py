@@ -8,6 +8,7 @@ This module provides the following classes:
 import json
 import sqlite3
 from datetime import date, timedelta
+from pathlib import Path
 from typing import Any, Dict, Optional
 
 from himon import get_cache_root
@@ -29,11 +30,11 @@ class SQLiteCache:
 
     def __init__(
         self,
-        path: str = get_cache_root() / "cache.sqlite",
+        path: Path = None,
         expiry: Optional[int] = 14,
     ):
         self.expiry = timedelta(days=expiry) if expiry else None
-        self.con = sqlite3.connect(path)
+        self.con = sqlite3.connect(path or get_cache_root() / "cache.sqlite")
         self.cur = self.con.cursor()
         self.cur.execute("CREATE TABLE IF NOT EXISTS queries (query, response, date_added);")
         self.delete()
@@ -59,7 +60,7 @@ class SQLiteCache:
             return json.loads(results[0])
         return {}
 
-    def insert(self, query: str, response: str):
+    def insert(self, query: str, response: str) -> None:
         """
         Insert data into the cache database.
 
@@ -73,7 +74,7 @@ class SQLiteCache:
         )
         self.con.commit()
 
-    def delete(self):
+    def delete(self) -> None:
         """Remove all expired data from the cache database."""
         if not self.expiry:
             return

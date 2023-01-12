@@ -11,7 +11,7 @@ This module provides the following classes:
 """
 __all__ = ["Comic", "Character", "Creator", "KeyEvent", "Variant"]
 from datetime import date, datetime
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, Extra, Field, validator
 
@@ -50,7 +50,7 @@ class Variant(ComicModel):
     variant_id: int = Field(alias="id")
 
     @validator("price", pre=True)
-    def validate_optional_float(cls, v) -> Optional[float]:
+    def validate_optional_float(cls, v: str) -> Optional[float]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_float(v)
 
@@ -75,12 +75,12 @@ class KeyEvent(ComicModel):
     name: str
     note: Optional[str] = None
     parent_name: Optional[str] = None  # Unknown field
-    type: int  # How is it different to type_id?
+    type: int  # How is it different to type_id?  # noqa: A003
     type_id: int
     universe_name: Optional[str] = None
 
     @validator("note", "parent_name", pre=True)
-    def validate_optional_str(cls, v) -> Optional[str]:
+    def validate_optional_str(cls, v: str) -> Optional[str]:
         """Pydantic validator to convert a Str to None or return html stripped value."""
         return to_optional_str(v)
 
@@ -145,17 +145,17 @@ class Character(ComicModel):
     universe_name: Optional[str] = None
 
     @validator("parent_name", "universe_name", pre=True)
-    def validate_optional_str(cls, v) -> Optional[str]:
+    def validate_optional_str(cls, v: str) -> Optional[str]:
         """Pydantic validator to convert a Str to None or return html stripped value."""
         return to_optional_str(v)
 
     @validator("parent_id", "universe_id", pre=True)
-    def validate_optional_int(cls, v) -> Optional[int]:
+    def validate_optional_int(cls, v: str) -> Optional[int]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_int(v)
 
     @validator("is_enabled", pre=True)
-    def validate_bool(cls, v) -> bool:
+    def validate_bool(cls, v: str) -> bool:
         """Pydantic validator to convert a Str 0/1 to a bool."""
         return to_bool(v)
 
@@ -197,7 +197,7 @@ class Comic(ComicModel):
     date_added: datetime
     date_modified: datetime
     description: Optional[str] = None
-    format: str
+    format: str  # noqa: A003
     is_enabled: bool = Field(alias="enabled")
     is_nsfw: bool = Field(alias="nsfw")
     is_variant: bool = Field(alias="variant")
@@ -214,7 +214,7 @@ class Comic(ComicModel):
     upc: Optional[int] = None
     variants: List[Variant] = Field(default_factory=list)
 
-    def __init__(self, **data):
+    def __init__(self, **data: Any):
         if data["keys"]:
             data["key_events"] = list(data["keys"].values())
         for key, value in data["details"].items():
@@ -222,21 +222,21 @@ class Comic(ComicModel):
         super().__init__(**data)
 
     @validator("isbn", "parent_id", "upc", pre=True)
-    def validate_optional_int(cls, v) -> Optional[int]:
+    def validate_optional_int(cls, v: str) -> Optional[int]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_int(v)
 
     @validator("is_enabled", "is_nsfw", "is_variant", pre=True)
-    def validate_bool(cls, v) -> bool:
+    def validate_bool(cls, v: str) -> bool:
         """Pydantic validator to convert a Str 0/1 to a bool."""
         return to_bool(v)
 
     @validator("description", "parent_title", pre=True)
-    def validate_optional_str(cls, v) -> Optional[str]:
+    def validate_optional_str(cls, v: str) -> Optional[str]:
         """Pydantic validator to convert a Str to None or return html stripped value."""
         return to_optional_str(v)
 
     @validator("price", pre=True)
-    def validate_optional_float(cls, v) -> Optional[float]:
+    def validate_optional_float(cls, v: str) -> Optional[float]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_float(v)
