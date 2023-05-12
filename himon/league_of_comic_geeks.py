@@ -103,7 +103,10 @@ class LeagueofComicGeeks:
             raise ServiceError("Service took too long to respond") from err
 
     def _json_get_request(
-        self, endpoint: str, params: Dict[str, str] = None, skip_cache: bool = False
+        self,
+        endpoint: str,
+        params: Dict[str, str] = None,
+        skip_cache: bool = False,
     ) -> Dict[str, Any]:
         """
         Check cache or make GET request to League of Comic Geeks.
@@ -248,7 +251,8 @@ class LeagueofComicGeeks:
         try:
             self.headers["X-API-KEY"] = self.access_token
             result = self._json_get_request(
-                "/series/format/json", params={"series_id": str(series_id)}
+                "/series/format/json",
+                params={"series_id": str(series_id)},
             )
             if "details" in result:
                 result = result["details"]
@@ -272,7 +276,8 @@ class LeagueofComicGeeks:
         try:
             self.headers["X-API-KEY"] = self.access_token
             result = self._json_get_request(
-                "/comic/format/json", params={"comic_id": str(comic_id)}
+                "/comic/format/json",
+                params={"comic_id": str(comic_id)},
             )
             return parse_obj_as(Comic, result)
         except ValidationError as err:

@@ -8,7 +8,7 @@ from datetime import date
 from himon.league_of_comic_geeks import LeagueofComicGeeks
 
 
-def test_search_result(session: LeagueofComicGeeks):
+def test_search_result(session: LeagueofComicGeeks) -> None:
     """Test using the search endpoint with a valid comic title."""
     results = session.search(search_term="Blackest Night #1")
     assert len(results) != 0

@@ -8,7 +8,7 @@ from datetime import datetime
 from himon.league_of_comic_geeks import LeagueofComicGeeks
 
 
-def test_series(session: LeagueofComicGeeks):
+def test_series(session: LeagueofComicGeeks) -> None:
     """Test using the series endpoint with a valid series_id."""
     result = session.series(series_id=100096)
     assert result is not None

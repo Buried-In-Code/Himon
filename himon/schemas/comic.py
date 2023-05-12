@@ -63,9 +63,9 @@ class KeyEvent(ComicModel):
         character_id: Identifier used by League of Comic Geeks.
         event_id: Identifier used by League of Comic Geeks.
         name: Name/Title of the Event.
-        note:
-        parent_name:
-        type:
+        note: Unknown field
+        parent_name: Unknown field
+        type: Unknown field
         type_id: Identifier used by League of Comic Geeks.
         universe_name: Universe this Event took place in.
     """
@@ -75,7 +75,7 @@ class KeyEvent(ComicModel):
     name: str
     note: Optional[str] = None
     parent_name: Optional[str] = None  # Unknown field
-    type: int  # How is it different to type_id?  # noqa: A003
+    type: int  # How is it different to type_id?
     type_id: int
     universe_name: Optional[str] = None
 
@@ -121,12 +121,12 @@ class Character(ComicModel):
         date_added: Date and time when the Character was added.
         date_modified: Date and time when the Character was last updated.
         full_name: Full name of Character
-        is_enabled:
+        is_enabled: Unknown field
         name: Name/Alias of Character.
-        parent_id:
-        parent_name:
+        parent_id: Unknown field
+        parent_name: Unknown field
         publisher_name: The publisher name of Character.
-        type_id:
+        type_id: Unknown field
         universe_id: Universe id this Character is from.
         universe_name: Universe name this Character is from.
     """
@@ -173,7 +173,7 @@ class Comic(ComicModel):
         date_modified: Date and time when the Comic was last updated.
         description: Description of the Comic.
         format: Type of Comic.
-        is_enabled:
+        is_enabled: Unknown field
         is_nsfw: Comic has been marked as NSFW
         is_variant: Comic has been marked as Variant
         isbn: ISBN identifier
@@ -197,7 +197,7 @@ class Comic(ComicModel):
     date_added: datetime
     date_modified: datetime
     description: Optional[str] = None
-    format: str  # noqa: A003
+    format: str
     is_enabled: bool = Field(alias="enabled")
     is_nsfw: bool = Field(alias="nsfw")
     is_variant: bool = Field(alias="variant")
