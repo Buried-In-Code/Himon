@@ -22,7 +22,7 @@ class Series(BaseModel):
         date_added: Date and time when the Series was added.
         date_modified: Date and time when the Series was last updated.
         description: Description of the Series.
-        is_enabled:
+        is_enabled: Unknown field
         publisher_id: The publisher id of the Series.
         publisher_name: The publisher name of the Series.
         series_id: Identifier used by League of Comic Geeks.

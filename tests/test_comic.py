@@ -8,7 +8,7 @@ from datetime import date, datetime
 from himon.league_of_comic_geeks import LeagueofComicGeeks
 
 
-def test_comic(session: LeagueofComicGeeks):
+def test_comic(session: LeagueofComicGeeks) -> None:
     """Test using the comic endpoint with a valid comic_id."""
     result = session.comic(comic_id=2710631)
     assert result is not None
@@ -35,7 +35,7 @@ def test_comic(session: LeagueofComicGeeks):
     assert len(result.variants) == 6
 
 
-def test_character_null_publisher(session: LeagueofComicGeeks):
+def test_character_null_publisher(session: LeagueofComicGeeks) -> None:
     """Test the comic endpoint with a comic that has a null character publisher name."""
     result = session.comic(comic_id=4174173)
     assert result is not None
@@ -43,7 +43,7 @@ def test_character_null_publisher(session: LeagueofComicGeeks):
     assert result.characters[0].publisher_name is None
 
 
-def test_key_event_null_universe(session: LeagueofComicGeeks):
+def test_key_event_null_universe(session: LeagueofComicGeeks) -> None:
     """Test the comic endpoint with a comic that has a null key event universe name."""
     result = session.comic(comic_id=4174173)
     assert result is not None
@@ -51,7 +51,7 @@ def test_key_event_null_universe(session: LeagueofComicGeeks):
     assert result.key_events[0].universe_name is None
 
 
-def test_upc_alpha_only(session: LeagueofComicGeeks):
+def test_upc_alpha_only(session: LeagueofComicGeeks) -> None:
     """Test the comic endpoint with a comic that has an invalid character in the upc."""
     result = session.comic(comic_id=6257084)
     assert result is not None

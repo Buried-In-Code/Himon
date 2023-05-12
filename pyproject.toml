@@ -24,9 +24,9 @@ classifiers = [
   "Typing :: Typed"
 ]
 dependencies = [
-  "pydantic >= 1.10.4",
+  "pydantic >= 1.10.7",
   "ratelimit >= 2.2.1",
-  "requests >= 2.28.1"
+  "requests >= 2.30.0"
 ]
 description = "A Python wrapper for League of Comic Geeks."
 dynamic = ["version"]
@@ -41,13 +41,15 @@ dev = [
   "pre-commit >= 2.21.0"
 ]
 docs = [
-  "mkdocs >= 1.4.2",
-  "mkdocs-include-markdown-plugin >= 4.0.3",
-  "mkdocstrings[python] >= 0.19.1"
+  "mkdocs >= 1.4.3",
+  "mkdocs-include-markdown-plugin >= 4.0.4",
+  "mkdocs-material >= 9.1.11",
+  "mkdocstrings[python] >= 0.21.2"
 ]
 test = [
-  "pytest >= 7.2.0",
-  "pytest-cov >= 4.0.0"
+  "pytest >= 7.3.1",
+  "pytest-cov >= 4.0.0",
+  "pytest-pretty >= 1.2.0"
 ]
 
 [project.urls]
@@ -70,25 +72,24 @@ source = ["himon"]
 path = "himon/__init__.py"
 
 [tool.pytest.ini_options]
-addopts = ["--cov", "-x"]
+addopts = ["--cov"]
 
 [tool.ruff]
 fix = true
+format = "grouped"
 ignore = [
+  "A001",
+  "A003",
   "ANN101",
+  "ANN102",
+  "ANN204",
+  "ANN206",
+  "ANN401",
+  "C901",
   "D107",
-  "D203",
-  "D204",
   "D212",
-  "D213",
-  "D215",
-  "D400",
-  "D404",
-  "D406",
-  "D407",
-  "D408",
-  "D409",
-  "D413"
+  "RET504",
+  "SIM105"
 ]
 line-length = 100
 select = [
@@ -97,29 +98,46 @@ select = [
   "ARG",
   "B",
   "BLE",
-  "C4",
+  "C40",
   "C90",
+  "COM",
   "D",
+  "DJ",
   "E",
   "ERA",
   "F",
+  "G",
   "I",
   "ICN",
+  "INP",
+  "ISC",
   "N",
+  "NPY",
+  "PD",
+  "PGH",
+  "PIE",
   "PLC",
   "PLE",
-  "PLR",
   "PLW",
+  "PT",
+  "PTH",
+  "PYI",
   "Q",
   "RET",
+  "RSE",
   "RUF",
   "S",
   "SIM",
+  "SLF",
+  "T10",
+  "T20",
+  "TCH",
   "TID",
   "UP",
   "W",
   "YTT"
 ]
+show-fixes = true
 target-version = "py37"
 
 [tool.ruff.flake8-annotations]
@@ -133,10 +151,13 @@ ban-relative-imports = "all"
 combine-as-imports = true
 
 [tool.ruff.mccabe]
-max-complexity = 10
+max-complexity = 18
 
 [tool.ruff.pep8-naming]
 classmethod-decorators = ["classmethod", "pydantic.validator"]
 
 [tool.ruff.per-file-ignores]
-"tests/test_*.py" = ["ANN201", "S101"]
+"tests/test_*.py" = ["S101", "SLF001"]
+
+[tool.ruff.pydocstyle]
+convention = "google"

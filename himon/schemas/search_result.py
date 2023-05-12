@@ -23,7 +23,7 @@ class SearchResult(BaseModel):
         date_modified: Date and time when the Comic was last updated.
         description: Description of the Comic.
         format: Type of Comic.
-        is_enabled:
+        is_enabled: Unknown field
         is_variant: Comic has been marked as Variant.
         parent_id: If it is a variant comic, id of the original comic.
         parent_title: If it is a variant comic, title of the original comic.
@@ -42,7 +42,7 @@ class SearchResult(BaseModel):
     comic_id: int = Field(alias="id")
     date_modified: datetime
     description: Optional[str] = None
-    format: str  # noqa: A003
+    format: str
     is_enabled: bool = Field(alias="enabled")
     is_variant: bool = Field(alias="variant")
     parent_id: Optional[int] = None

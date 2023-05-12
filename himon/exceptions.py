@@ -11,10 +11,6 @@ This module provides the following classes:
 class ServiceError(Exception):
     """Class for any API errors."""
 
-    pass
-
 
 class AuthenticationError(ServiceError):
     """Class for any authentication errors."""
-
-    pass
