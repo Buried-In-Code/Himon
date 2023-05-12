@@ -9,9 +9,9 @@ __all__ = ["SearchResult"]
 from datetime import date, datetime
 from typing import Optional
 
-from pydantic import BaseModel, Extra, Field, validator
+from pydantic import Field, validator
 
-from himon.schemas import to_bool, to_optional_float, to_optional_int, to_optional_str
+from himon.schemas import BaseModel, to_bool, to_optional_float, to_optional_int, to_optional_str
 
 
 class SearchResult(BaseModel):
@@ -57,13 +57,6 @@ class SearchResult(BaseModel):
     title: str
     year_begin: int = Field(alias="series_begin")
     year_end: Optional[int] = Field(alias="series_end", default=None)
-
-    class Config:
-        """Any extra fields will be ignored, strings will have start/end whitespace stripped."""
-
-        anystr_strip_whitespace = True
-        allow_population_by_field_name = True
-        extra = Extra.ignore
 
     @validator("parent_id", "series_volume", "year_end", pre=True)
     def validate_optional_int(cls, v: str) -> Optional[int]:

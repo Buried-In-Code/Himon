@@ -13,25 +13,14 @@ __all__ = ["Comic", "Character", "Creator", "KeyEvent", "Variant"]
 from datetime import date, datetime
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, Extra, Field, validator
+from pydantic import Field, validator
 
-from himon.schemas import to_bool, to_optional_float, to_optional_int, to_optional_str
+from himon.schemas import BaseModel, to_bool, to_optional_float, to_optional_int, to_optional_str
 from himon.schemas.search_result import SearchResult
 from himon.schemas.series import Series
 
 
-class ComicModel(BaseModel):
-    """Base model for Comic and subclasses."""
-
-    class Config:
-        """Any extra fields will be ignored, strings will have start/end whitespace stripped."""
-
-        anystr_strip_whitespace = True
-        allow_population_by_field_name = True
-        extra = Extra.ignore
-
-
-class Variant(ComicModel):
+class Variant(BaseModel):
     """
     The Variant object contains information for a variant comic.
 
@@ -55,7 +44,7 @@ class Variant(ComicModel):
         return to_optional_float(v)
 
 
-class KeyEvent(ComicModel):
+class KeyEvent(BaseModel):
     """
     The KeyEvent object contains information for a key event.
 
@@ -85,7 +74,7 @@ class KeyEvent(ComicModel):
         return to_optional_str(v)
 
 
-class Creator(ComicModel):
+class Creator(BaseModel):
     """
     The Creator object contains information for a creator.
 
@@ -112,7 +101,7 @@ class Creator(ComicModel):
         return role_dict
 
 
-class Character(ComicModel):
+class Character(BaseModel):
     """
     The Character object contains information for a character.
 
@@ -160,7 +149,7 @@ class Character(ComicModel):
         return to_bool(v)
 
 
-class Comic(ComicModel):
+class Comic(BaseModel):
     """
     The Comic object contains information for a comic.
 
