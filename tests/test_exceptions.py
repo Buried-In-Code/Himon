@@ -26,7 +26,7 @@ def test_unauthorized() -> None:
 def test_not_found(session: LeagueofComicGeeks) -> None:
     """Test a 404 Not Found raises a ServiceError."""
     with pytest.raises(ServiceError):
-        session._json_get_request(endpoint="/invalid")
+        session._get_request(endpoint="/invalid")
 
 
 def test_timeout(client_id: str, client_secret: str, access_token: Optional[str]) -> None:
