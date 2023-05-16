@@ -3,19 +3,16 @@ The Comic module.
 
 This module provides the following classes:
 
-- Variant
-- KeyEvent
-- Creator
-- Character
 - Comic
 """
-__all__ = ["Comic", "Character", "Creator", "KeyEvent", "Variant"]
+__all__ = ["Comic"]
 from datetime import date, datetime
 from typing import Any, Dict, List, Optional
 
 from pydantic import Field, validator
 
-from himon.schemas import BaseModel, to_bool, to_optional_float, to_optional_int, to_optional_str
+from himon.schemas import BaseModel
+from himon.schemas._validators import to_bool, to_optional_float, to_optional_int, to_optional_str
 from himon.schemas.search_result import SearchResult
 from himon.schemas.series import Series
 
@@ -39,7 +36,7 @@ class Variant(BaseModel):
     variant_id: int = Field(alias="id")
 
     @validator("price", pre=True)
-    def validate_optional_float(cls, v: str) -> Optional[float]:
+    def _to_optional_float(cls, v: str) -> Optional[float]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_float(v)
 
@@ -63,13 +60,13 @@ class KeyEvent(BaseModel):
     event_id: int = Field(alias="id")
     name: str
     note: Optional[str] = None
-    parent_name: Optional[str] = None  # Unknown field
+    parent_name: Optional[str] = None
     type: int  # How is it different to type_id?
     type_id: int
     universe_name: Optional[str] = None
 
     @validator("note", "parent_name", pre=True)
-    def validate_optional_str(cls, v: str) -> Optional[str]:
+    def _to_optional_str(cls, v: str) -> Optional[str]:
         """Pydantic validator to convert a Str to None or return html stripped value."""
         return to_optional_str(v)
 
@@ -126,25 +123,25 @@ class Character(BaseModel):
     full_name: str
     is_enabled: bool = Field(alias="enabled")
     name: str
-    parent_id: Optional[int] = None  # Unknown field
-    parent_name: Optional[str] = None  # Unknown field
+    parent_id: Optional[int] = None
+    parent_name: Optional[str] = None
     publisher_name: Optional[str] = None
     type_id: int
     universe_id: Optional[int] = None
     universe_name: Optional[str] = None
 
     @validator("parent_name", "universe_name", pre=True)
-    def validate_optional_str(cls, v: str) -> Optional[str]:
+    def _to_optional_str(cls, v: str) -> Optional[str]:
         """Pydantic validator to convert a Str to None or return html stripped value."""
         return to_optional_str(v)
 
     @validator("parent_id", "universe_id", pre=True)
-    def validate_optional_int(cls, v: str) -> Optional[int]:
+    def _to_optional_int(cls, v: str) -> Optional[int]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_int(v)
 
     @validator("is_enabled", pre=True)
-    def validate_bool(cls, v: str) -> bool:
+    def _to_bool(cls, v: str) -> bool:
         """Pydantic validator to convert a Str 0/1 to a bool."""
         return to_bool(v)
 
@@ -211,21 +208,21 @@ class Comic(BaseModel):
         super().__init__(**data)
 
     @validator("isbn", "parent_id", "upc", pre=True)
-    def validate_optional_int(cls, v: str) -> Optional[int]:
+    def _to_optional_int(cls, v: str) -> Optional[int]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_int(v)
 
     @validator("is_enabled", "is_nsfw", "is_variant", pre=True)
-    def validate_bool(cls, v: str) -> bool:
+    def _to_bool(cls, v: str) -> bool:
         """Pydantic validator to convert a Str 0/1 to a bool."""
         return to_bool(v)
 
     @validator("description", "parent_title", pre=True)
-    def validate_optional_str(cls, v: str) -> Optional[str]:
+    def _to_optional_str(cls, v: str) -> Optional[str]:
         """Pydantic validator to convert a Str to None or return html stripped value."""
         return to_optional_str(v)
 
     @validator("price", pre=True)
-    def validate_optional_float(cls, v: str) -> Optional[float]:
+    def _to_optional_float(cls, v: str) -> Optional[float]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_float(v)
