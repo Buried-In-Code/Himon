@@ -66,7 +66,7 @@ class LeagueofComicGeeks:
 
     @sleep_and_retry
     @limits(calls=20, period=MINUTE)
-    def _perform_json_get_request(self, url: str, params: Dict[str, str] = None) -> Dict[str, Any]:
+    def _perform_get_request(self, url: str, params: Dict[str, str] = None) -> Dict[str, Any]:
         """
         Make GET request to League of Comic Geeks.
 
@@ -102,7 +102,7 @@ class LeagueofComicGeeks:
         except ReadTimeout as err:
             raise ServiceError("Service took too long to respond") from err
 
-    def _json_get_request(
+    def _get_request(
         self,
         endpoint: str,
         params: Dict[str, str] = None,
@@ -131,12 +131,10 @@ class LeagueofComicGeeks:
         cache_params = f"?{urlencode(params)}" if params else ""
         cache_key = f"{url}{cache_params}"
 
-        if self.cache and not skip_cache:
-            cached_response = self.cache.select(cache_key)
-            if cached_response:
-                return cached_response
+        if self.cache and not skip_cache and (cached_response := self.cache.select(cache_key)):
+            return cached_response
 
-        response = self._perform_json_get_request(url=url, params=params)
+        response = self._perform_get_request(url=url, params=params)
 
         if self.cache and not skip_cache:
             self.cache.insert(cache_key, response)
@@ -145,45 +143,9 @@ class LeagueofComicGeeks:
 
     @sleep_and_retry
     @limits(calls=20, period=MINUTE)
-    def _perform_str_get_request(self, url: str, params: Dict[str, str] = None) -> str:
-        """
-        Make GET request to League of Comic Geeks, expecting a str response.
-
-        Args:
-            url: The url to request information from.
-            params: Parameters to add to the request.
-
-        Returns:
-            String response from League of Comic Geeks.
-
-        Raises:
-            ServiceError: If there is an issue with the request or response.
-            AuthenticationError:
-                If League of Comic Geeks returns with an invalid API Key or Client Id response.
-        """
-        if params is None:
-            params = {}
-
-        try:
-            response = get(url, params=params, headers=self.headers, timeout=self.timeout)
-            response.raise_for_status()
-            return response.json()
-        except ConnectionError as err:
-            raise ServiceError(f"Unable to connect to `{url}`") from err
-        except HTTPError as err:
-            if err.response.status_code == 403:
-                raise AuthenticationError("Invalid API Key") from err
-            if err.response.status_code == 404:
-                raise ServiceError("Unknown endpoint") from err
-            raise ServiceError(f"{err.response.status_code}: {err.response.text}") from err
-        except JSONDecodeError as err:
-            raise ServiceError(f"Unable to parse response from `{url}` as Json") from err
-        except ReadTimeout as err:
-            raise ServiceError("Service took too long to respond") from err
-
     def _str_get_request(self, endpoint: str, params: Dict[str, str] = None) -> str:
         """
-        Check cache or make GET request to League of Comic Geeks.
+        Make GET request to League of Comic Geeks, expecting a str response.
 
         Args:
             endpoint: The endpoint to request information from.
@@ -201,7 +163,23 @@ class LeagueofComicGeeks:
             params = {}
 
         url = self.API_URL + endpoint
-        return self._perform_str_get_request(url=url, params=params)
+
+        try:
+            response = get(url, params=params, headers=self.headers, timeout=self.timeout)
+            response.raise_for_status()
+            return response.json()
+        except ConnectionError as err:
+            raise ServiceError(f"Unable to connect to `{url}`") from err
+        except HTTPError as err:
+            if err.response.status_code == 403:
+                raise AuthenticationError("Invalid API Key") from err
+            if err.response.status_code == 404:
+                raise ServiceError("Unknown endpoint") from err
+            raise ServiceError(f"{err.response.status_code}: {err.response.text}") from err
+        except JSONDecodeError as err:
+            raise ServiceError(f"Unable to parse response from `{url}` as Json") from err
+        except ReadTimeout as err:
+            raise ServiceError("Service took too long to respond") from err
 
     def generate_access_token(self) -> str:
         """
@@ -230,12 +208,12 @@ class LeagueofComicGeeks:
         """
         try:
             self.headers["X-API-KEY"] = self.access_token
-            results = self._json_get_request("/search/format/json", params={"query": search_term})
+            results = self._get_request("/search/format/json", params={"query": search_term})
             return parse_obj_as(List[SearchResult], results)
         except ValidationError as err:
             raise ServiceError(err) from err
 
-    def series(self, series_id: int) -> Series:
+    def get_series(self, series_id: int) -> Series:
         """
         Request data for a Series based on its id.
 
@@ -250,7 +228,7 @@ class LeagueofComicGeeks:
         """
         try:
             self.headers["X-API-KEY"] = self.access_token
-            result = self._json_get_request(
+            result = self._get_request(
                 "/series/format/json",
                 params={"series_id": str(series_id)},
             )
@@ -260,7 +238,24 @@ class LeagueofComicGeeks:
         except ValidationError as err:
             raise ServiceError(err) from err
 
-    def comic(self, comic_id: int) -> Comic:
+    def series(self, series_id: int) -> Series:
+        """
+        Request data for a Series based on its id.
+
+        **DEPRECATED**: Use get_series()
+
+        Args:
+            series_id: The Series id.
+
+        Returns:
+            A Series object.
+
+        Raises:
+            ServiceError: If there is an issue with validating the response.
+        """
+        return self.get_series(series_id=series_id)
+
+    def get_comic(self, comic_id: int) -> Comic:
         """
         Request data for a Comic based on its id.
 
@@ -275,10 +270,27 @@ class LeagueofComicGeeks:
         """
         try:
             self.headers["X-API-KEY"] = self.access_token
-            result = self._json_get_request(
+            result = self._get_request(
                 "/comic/format/json",
                 params={"comic_id": str(comic_id)},
             )
             return parse_obj_as(Comic, result)
         except ValidationError as err:
             raise ServiceError(err) from err
+
+    def comic(self, comic_id: int) -> Comic:
+        """
+        Request data for a Comic based on its id.
+
+        **DEPRECATED**: Use get_comic()
+
+        Args:
+            comic_id: The Comic id.
+
+        Returns:
+            A Comic object.
+
+        Raises:
+            ServiceError: If there is an issue with validating the response.
+        """
+        return self.get_comic(comic_id=comic_id)

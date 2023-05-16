@@ -9,9 +9,10 @@ __all__ = ["SearchResult"]
 from datetime import date, datetime
 from typing import Optional
 
-from pydantic import BaseModel, Extra, Field, validator
+from pydantic import Field, validator
 
-from himon.schemas import to_bool, to_optional_float, to_optional_int, to_optional_str
+from himon.schemas import BaseModel
+from himon.schemas._validators import to_bool, to_optional_float, to_optional_int, to_optional_str
 
 
 class SearchResult(BaseModel):
@@ -58,29 +59,22 @@ class SearchResult(BaseModel):
     year_begin: int = Field(alias="series_begin")
     year_end: Optional[int] = Field(alias="series_end", default=None)
 
-    class Config:
-        """Any extra fields will be ignored, strings will have start/end whitespace stripped."""
-
-        anystr_strip_whitespace = True
-        allow_population_by_field_name = True
-        extra = Extra.ignore
-
     @validator("parent_id", "series_volume", "year_end", pre=True)
-    def validate_optional_int(cls, v: str) -> Optional[int]:
+    def _to_optional_int(cls, v: str) -> Optional[int]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_int(v)
 
     @validator("is_variant", "is_enabled", pre=True)
-    def validate_bool(cls, v: str) -> bool:
+    def _to_bool(cls, v: str) -> bool:
         """Pydantic validator to convert a Str 0/1 to a bool."""
         return to_bool(v)
 
     @validator("price", pre=True)
-    def validate_optional_float(cls, v: str) -> Optional[float]:
+    def _to_optional_float(cls, v: str) -> Optional[float]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_float(v)
 
     @validator("description", "parent_title", pre=True)
-    def validate_optional_str(cls, v: str) -> Optional[str]:
+    def _to_optional_str(cls, v: str) -> Optional[str]:
         """Pydantic validator to convert a Str to None or return html stripped value."""
         return to_optional_str(v)
