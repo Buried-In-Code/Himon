@@ -66,7 +66,9 @@ class LeagueofComicGeeks:
 
     @sleep_and_retry
     @limits(calls=20, period=MINUTE)
-    def _perform_get_request(self, url: str, params: Dict[str, str] = None) -> Dict[str, Any]:
+    def _perform_get_request(
+        self, url: str, params: Optional[Dict[str, str]] = None
+    ) -> Dict[str, Any]:
         """
         Make GET request to League of Comic Geeks.
 
@@ -105,7 +107,7 @@ class LeagueofComicGeeks:
     def _get_request(
         self,
         endpoint: str,
-        params: Dict[str, str] = None,
+        params: Optional[Dict[str, str]] = None,
         skip_cache: bool = False,
     ) -> Dict[str, Any]:
         """
@@ -143,7 +145,7 @@ class LeagueofComicGeeks:
 
     @sleep_and_retry
     @limits(calls=20, period=MINUTE)
-    def _str_get_request(self, endpoint: str, params: Dict[str, str] = None) -> str:
+    def _str_get_request(self, endpoint: str, params: Optional[Dict[str, str]] = None) -> str:
         """
         Make GET request to League of Comic Geeks, expecting a str response.
 

@@ -30,7 +30,7 @@ class SQLiteCache:
 
     def __init__(
         self,
-        path: Path = None,
+        path: Optional[Path] = None,
         expiry: Optional[int] = 14,
     ):
         self.expiry = expiry
