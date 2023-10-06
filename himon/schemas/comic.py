@@ -1,5 +1,4 @@
-"""
-The Comic module.
+"""The Comic module.
 
 This module provides the following classes:
 
@@ -7,9 +6,9 @@ This module provides the following classes:
 """
 __all__ = ["Comic"]
 from datetime import date, datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Type
 
-from pydantic import Field, validator
+from pydantic import Field, field_validator
 
 from himon.schemas import BaseModel
 from himon.schemas._validators import to_bool, to_optional_float, to_optional_int, to_optional_str
@@ -18,36 +17,34 @@ from himon.schemas.series import Series
 
 
 class Variant(BaseModel):
-    """
-    The Variant object contains information for a variant comic.
+    """The Variant object contains information for a variant comic.
 
     Attributes:
         date_modified: Date and time when the Variant was last updated.
+        id: Identifier used by League of Comic Geeks.
         price: Price of the Variant.
         release_date: The date the Variant was released.
         title: Name/Title of the Variant.
-        variant_id: Identifier used by League of Comic Geeks.
     """
 
     date_modified: datetime
+    id: int  # noqa: A003
     price: Optional[float] = None
     release_date: date = Field(alias="date_release")
     title: str
-    variant_id: int = Field(alias="id")
 
-    @validator("price", pre=True)
-    def _to_optional_float(cls, v: str) -> Optional[float]:
+    @field_validator("price", mode="before")
+    def _to_optional_float(cls: Type["Variant"], v: str) -> Optional[float]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_float(v)
 
 
 class KeyEvent(BaseModel):
-    """
-    The KeyEvent object contains information for a key event.
+    """The KeyEvent object contains information for a key event.
 
     Attributes:
         character_id: Identifier used by League of Comic Geeks.
-        event_id: Identifier used by League of Comic Geeks.
+        id: Identifier used by League of Comic Geeks.
         name: Name/Title of the Event.
         note: Unknown field
         parent_name: Unknown field
@@ -57,38 +54,37 @@ class KeyEvent(BaseModel):
     """
 
     character_id: int
-    event_id: int = Field(alias="id")
+    id: int  # noqa: A003
     name: str
     note: Optional[str] = None
     parent_name: Optional[str] = None
-    type: int  # How is it different to type_id?
+    type: int  # How is it different to type_id?  # noqa: A003
     type_id: int
     universe_name: Optional[str] = None
 
-    @validator("note", "parent_name", pre=True)
-    def _to_optional_str(cls, v: str) -> Optional[str]:
+    @field_validator("note", "parent_name", mode="before")
+    def _to_optional_str(cls: Type["KeyEvent"], v: str) -> Optional[str]:
         """Pydantic validator to convert a Str to None or return html stripped value."""
         return to_optional_str(v)
 
 
 class Creator(BaseModel):
-    """
-    The Creator object contains information for a creator.
+    """The Creator object contains information for a creator.
 
     Attributes:
-        creator_id: Identifier used by League of Comic Geeks.
+        id: Identifier used by League of Comic Geeks.
         name: Name/Title of the Creator.
         role: List of roles the Creator has in the comic. Separated by `,`.
         role_id: List of role ids the Creator has in the comic. Separated by `,`.
     """
 
-    creator_id: int = Field(alias="id")
+    id: int  # noqa: A003
     name: str
     role: str
     role_id: str
 
     @property
-    def roles(self) -> Dict[int, str]:
+    def roles(self: "Creator") -> Dict[int, str]:
         """Return a dict of role id and role name the Creator is attached to."""
         role_dict = {}
         id_list = self.role_id.split(",")
@@ -99,14 +95,13 @@ class Creator(BaseModel):
 
 
 class Character(BaseModel):
-    """
-    The Character object contains information for a character.
+    """The Character object contains information for a character.
 
     Attributes:
-        character_id: Identifier used by League of Comic Geeks.
         date_added: Date and time when the Character was added.
         date_modified: Date and time when the Character was last updated.
         full_name: Full name of Character
+        id: Identifier used by League of Comic Geeks.
         is_enabled: Unknown field
         name: Name/Alias of Character.
         parent_id: Unknown field
@@ -117,10 +112,10 @@ class Character(BaseModel):
         universe_name: Universe name this Character is from.
     """
 
-    character_id: int = Field(alias="id")
     date_added: datetime
     date_modified: datetime
     full_name: str
+    id: int  # noqa: A003
     is_enabled: bool = Field(alias="enabled")
     name: str
     parent_id: Optional[int] = None
@@ -130,35 +125,34 @@ class Character(BaseModel):
     universe_id: Optional[int] = None
     universe_name: Optional[str] = None
 
-    @validator("parent_name", "universe_name", pre=True)
-    def _to_optional_str(cls, v: str) -> Optional[str]:
+    @field_validator("parent_name", "universe_name", mode="before")
+    def _to_optional_str(cls: Type["Character"], v: str) -> Optional[str]:
         """Pydantic validator to convert a Str to None or return html stripped value."""
         return to_optional_str(v)
 
-    @validator("parent_id", "universe_id", pre=True)
-    def _to_optional_int(cls, v: str) -> Optional[int]:
+    @field_validator("parent_id", "universe_id", mode="before")
+    def _to_optional_int(cls: Type["Character"], v: str) -> Optional[int]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_int(v)
 
-    @validator("is_enabled", pre=True)
-    def _to_bool(cls, v: str) -> bool:
+    @field_validator("is_enabled", mode="before")
+    def _to_bool(cls: Type["Character"], v: str) -> bool:
         """Pydantic validator to convert a Str 0/1 to a bool."""
         return to_bool(v)
 
 
 class Comic(BaseModel):
-    """
-    The Comic object contains information for a comic.
+    """The Comic object contains information for a comic.
 
     Attributes:
         characters: List of Characters in the Comic.
         collected_in: List of Comics this has been collected in.
-        comic_id: Identifier used by League of Comic Geeks.
         creators: List of Creators associated with the Comic
         date_added: Date and time when the Comic was added.
         date_modified: Date and time when the Comic was last updated.
         description: Description of the Comic.
         format: Type of Comic.
+        id: Identifier used by League of Comic Geeks.
         is_enabled: Unknown field
         is_nsfw: Comic has been marked as NSFW
         is_variant: Comic has been marked as Variant
@@ -178,12 +172,12 @@ class Comic(BaseModel):
 
     characters: List[Character] = Field(default_factory=list)
     collected_in: List[SearchResult] = Field(default_factory=list)
-    comic_id: int = Field(alias="id")
     creators: List[Creator] = Field(default_factory=list)
     date_added: datetime
     date_modified: datetime
     description: Optional[str] = None
-    format: str
+    format: str  # noqa: A003
+    id: int  # noqa: A003
     is_enabled: bool = Field(alias="enabled")
     is_nsfw: bool = Field(alias="nsfw")
     is_variant: bool = Field(alias="variant")
@@ -200,29 +194,29 @@ class Comic(BaseModel):
     upc: Optional[int] = None
     variants: List[Variant] = Field(default_factory=list)
 
-    def __init__(self, **data: Any):
+    def __init__(self: "Comic", **data: Any):
         if data["keys"]:
             data["key_events"] = list(data["keys"].values())
         for key, value in data["details"].items():
             data[key] = value
         super().__init__(**data)
 
-    @validator("isbn", "parent_id", "upc", pre=True)
-    def _to_optional_int(cls, v: str) -> Optional[int]:
+    @field_validator("isbn", "parent_id", "upc", mode="before")
+    def _to_optional_int(cls: Type["Comic"], v: str) -> Optional[int]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_int(v)
 
-    @validator("is_enabled", "is_nsfw", "is_variant", pre=True)
-    def _to_bool(cls, v: str) -> bool:
+    @field_validator("is_enabled", "is_nsfw", "is_variant", mode="before")
+    def _to_bool(cls: Type["Comic"], v: str) -> bool:
         """Pydantic validator to convert a Str 0/1 to a bool."""
         return to_bool(v)
 
-    @validator("description", "parent_title", pre=True)
-    def _to_optional_str(cls, v: str) -> Optional[str]:
+    @field_validator("description", "parent_title", mode="before")
+    def _to_optional_str(cls: Type["Comic"], v: str) -> Optional[str]:
         """Pydantic validator to convert a Str to None or return html stripped value."""
         return to_optional_str(v)
 
-    @validator("price", pre=True)
-    def _to_optional_float(cls, v: str) -> Optional[float]:
+    @field_validator("price", mode="before")
+    def _to_optional_float(cls: Type["Comic"], v: str) -> Optional[float]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_float(v)

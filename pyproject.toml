@@ -17,37 +17,42 @@ classifiers = [
   "Operating System :: POSIX :: Linux",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python",
   "Topic :: Internet",
   "Typing :: Typed"
 ]
 dependencies = [
-  "pydantic >= 1.10.7",
+  "pydantic >= 2.4.2",
   "ratelimit >= 2.2.1",
-  "requests >= 2.30.0"
+  "requests >= 2.31.0"
 ]
 description = "A Python wrapper for League of Comic Geeks."
 dynamic = ["version"]
 keywords = ["comic", "comics", "metadata"]
 license = "GPL-3.0-or-later"
+maintainers = [
+  {email = "BuriedInCode@tuta.io", name = "BuriedInCode"}
+]
 name = "Himon"
 readme = "README.md"
 requires-python = ">= 3.8"
 
 [project.optional-dependencies]
 dev = [
-  "pre-commit >= 3.3.1"
+  "pre-commit >= 3.4.0"
 ]
 docs = [
-  "mkdocs >= 1.4.3",
-  "mkdocs-include-markdown-plugin >= 4.0.4",
-  "mkdocs-material >= 9.1.11",
-  "mkdocstrings[python] >= 0.21.2"
+  "mkdocs >= 1.5.3",
+  "mkdocs-include-markdown-plugin >= 6.0.1",
+  "mkdocs-material >= 9.4.4",
+  "mkdocstrings[python] >= 0.23.0"
 ]
 test = [
-  "pytest >= 7.3.1",
-  "pytest-cov >= 4.0.0",
+  "pytest >= 7.4.2",
+  "pytest-cov >= 4.1.0",
   "pytest-pretty >= 1.2.0"
 ]
 
@@ -59,7 +64,7 @@ Source = "https://github.com/Buried-In-Code/Himon"
 
 [tool.black]
 line-length = 100
-target-version = ["py310", "py311", "py38", "py39"]
+target-version = ["py310", "py311", "py312", "py38", "py39"]
 
 [tool.coverage.report]
 show_missing = true
@@ -75,67 +80,16 @@ addopts = ["--cov"]
 
 [tool.ruff]
 fix = true
-format = "grouped"
 ignore = [
-  "A001",
-  "A003",
-  "ANN101",
-  "ANN102",
-  "ANN204",
-  "ANN206",
-  "ANN401",
-  "C901",
   "D107",
-  "D212",
-  "RET504",
-  "SIM105"
+  "EXE",
+  "FBT",
+  "PLR2004",
+  "TCH"
 ]
 line-length = 100
-select = [
-  "A",
-  "ANN",
-  "ARG",
-  "B",
-  "BLE",
-  "C40",
-  "C90",
-  "COM",
-  "D",
-  "DJ",
-  "E",
-  "ERA",
-  "F",
-  "G",
-  "I",
-  "ICN",
-  "INP",
-  "ISC",
-  "N",
-  "NPY",
-  "PD",
-  "PGH",
-  "PIE",
-  "PLC",
-  "PLE",
-  "PLW",
-  "PT",
-  "PTH",
-  "PYI",
-  "Q",
-  "RET",
-  "RSE",
-  "RUF",
-  "S",
-  "SIM",
-  "SLF",
-  "T10",
-  "T20",
-  "TCH",
-  "TID",
-  "UP",
-  "W",
-  "YTT"
-]
+output-format = "grouped"
+select = ["ALL"]
 show-fixes = true
 target-version = "py38"
 
@@ -153,10 +107,14 @@ combine-as-imports = true
 max-complexity = 18
 
 [tool.ruff.pep8-naming]
-classmethod-decorators = ["classmethod", "pydantic.validator"]
+classmethod-decorators = ["classmethod", "pydantic.field_validator"]
 
 [tool.ruff.per-file-ignores]
-"tests/test_*.py" = ["S101", "SLF001"]
+"himon/schemas/*.py" = ["FA100"]
+"tests/test_*.py" = ["S101"]
 
 [tool.ruff.pydocstyle]
 convention = "google"
+
+[tool.ruff.pylint]
+max-args = 7

@@ -1,10 +1,10 @@
-"""
-The conftest module.
+"""The conftest module.
 
 This module contains pytest fixtures.
 """
+from __future__ import annotations
+
 import os
-from typing import Optional
 
 import pytest
 
@@ -25,13 +25,13 @@ def client_secret() -> str:
 
 
 @pytest.fixture(scope="session")
-def access_token() -> Optional[str]:
+def access_token() -> str | None:
     """Retrieve the Access Token from environment variables."""
     return os.getenv("LEAGUE_OF_COMIC_GEEKS__ACCESS_TOKEN")
 
 
 @pytest.fixture(scope="session")
-def session(client_id: str, client_secret: str, access_token: Optional[str]) -> LeagueofComicGeeks:
+def session(client_id: str, client_secret: str, access_token: str | None) -> LeagueofComicGeeks:
     """Set the Himon session fixture."""
     service = LeagueofComicGeeks(
         client_id=client_id,

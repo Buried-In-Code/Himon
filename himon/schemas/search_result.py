@@ -1,5 +1,4 @@
-"""
-The Search Result module.
+"""The Search Result module.
 
 This module provides the following classes:
 
@@ -7,23 +6,22 @@ This module provides the following classes:
 """
 __all__ = ["SearchResult"]
 from datetime import date, datetime
-from typing import Optional
+from typing import Optional, Type
 
-from pydantic import Field, validator
+from pydantic import Field, field_validator
 
 from himon.schemas import BaseModel
 from himon.schemas._validators import to_bool, to_optional_float, to_optional_int, to_optional_str
 
 
 class SearchResult(BaseModel):
-    """
-    The SearchResult object contains information for a search result.
+    """The SearchResult object contains information for a search result.
 
     Attributes:
-        comic_id: Identifier used by League of Comic Geeks.
         date_modified: Date and time when the Comic was last updated.
         description: Description of the Comic.
         format: Type of Comic.
+        id: Identifier used by League of Comic Geeks.
         is_enabled: Unknown field
         is_variant: Comic has been marked as Variant.
         parent_id: If it is a variant comic, id of the original comic.
@@ -40,10 +38,10 @@ class SearchResult(BaseModel):
         year_end: The year the Series ended.
     """
 
-    comic_id: int = Field(alias="id")
     date_modified: datetime
     description: Optional[str] = None
-    format: str
+    format: str  # noqa: A003
+    id: int  # noqa: A003
     is_enabled: bool = Field(alias="enabled")
     is_variant: bool = Field(alias="variant")
     parent_id: Optional[int] = None
@@ -59,22 +57,22 @@ class SearchResult(BaseModel):
     year_begin: int = Field(alias="series_begin")
     year_end: Optional[int] = Field(alias="series_end", default=None)
 
-    @validator("parent_id", "series_volume", "year_end", pre=True)
-    def _to_optional_int(cls, v: str) -> Optional[int]:
+    @field_validator("parent_id", "series_volume", "year_end", mode="before")
+    def _to_optional_int(cls: Type["SearchResult"], v: str) -> Optional[int]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_int(v)
 
-    @validator("is_variant", "is_enabled", pre=True)
-    def _to_bool(cls, v: str) -> bool:
+    @field_validator("is_variant", "is_enabled", mode="before")
+    def _to_bool(cls: Type["SearchResult"], v: str) -> bool:
         """Pydantic validator to convert a Str 0/1 to a bool."""
         return to_bool(v)
 
-    @validator("price", pre=True)
-    def _to_optional_float(cls, v: str) -> Optional[float]:
+    @field_validator("price", mode="before")
+    def _to_optional_float(cls: Type["SearchResult"], v: str) -> Optional[float]:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_float(v)
 
-    @validator("description", "parent_title", pre=True)
-    def _to_optional_str(cls, v: str) -> Optional[str]:
+    @field_validator("description", "parent_title", mode="before")
+    def _to_optional_str(cls: Type["SearchResult"], v: str) -> Optional[str]:
         """Pydantic validator to convert a Str to None or return html stripped value."""
         return to_optional_str(v)

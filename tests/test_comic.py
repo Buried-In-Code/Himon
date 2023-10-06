@@ -1,5 +1,4 @@
-"""
-The Comic test module.
+"""The Comic test module.
 
 This module contains tests for Comic objects.
 """
@@ -17,7 +16,7 @@ def test_comic(session: LeagueofComicGeeks) -> None:
     assert len(result.characters) == 106
     assert len(result.collected_in) == 13
     assert len(result.creators) == 9
-    assert result.date_added == datetime(2012, 7, 2, 23, 15, 17)
+    assert result.date_added.astimezone() == datetime(2012, 7, 2, 23, 15, 17).astimezone()
     assert result.format == "Comic"
     assert result.is_enabled is True
     assert result.is_nsfw is False

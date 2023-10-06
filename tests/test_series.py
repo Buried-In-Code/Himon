@@ -1,5 +1,4 @@
-"""
-The Series test module.
+"""The Series test module.
 
 This module contains tests for Series objects.
 """
@@ -14,7 +13,7 @@ def test_series(session: LeagueofComicGeeks) -> None:
     assert result is not None
     assert result.series_id == 100096
 
-    assert result.date_added == datetime(2012, 8, 5, 22, 20, 15)
+    assert result.date_added.astimezone() == datetime(2012, 8, 5, 22, 20, 15).astimezone()
     assert result.is_enabled is True
     assert result.publisher_id == 1
     assert result.publisher_name == "DC Comics"
