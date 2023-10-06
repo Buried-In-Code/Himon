@@ -1,9 +1,8 @@
-"""
-The Exceptions test module.
+"""The Exceptions test module.
 
 This module contains tests for Exceptions.
 """
-from typing import Optional
+from __future__ import annotations
 
 import pytest
 
@@ -20,16 +19,16 @@ def test_unauthorized() -> None:
         cache=None,
     )
     with pytest.raises(AuthenticationError):
-        session.comic(comic_id=1)
+        session.get_comic(comic_id=1)
 
 
 def test_not_found(session: LeagueofComicGeeks) -> None:
     """Test a 404 Not Found raises a ServiceError."""
     with pytest.raises(ServiceError):
-        session._get_request(endpoint="/invalid")
+        session._get_request(endpoint="/invalid")  # noqa: SLF001
 
 
-def test_timeout(client_id: str, client_secret: str, access_token: Optional[str]) -> None:
+def test_timeout(client_id: str, client_secret: str, access_token: str | None) -> None:
     """Test a TimeoutError for slow responses."""
     session = LeagueofComicGeeks(
         client_id=client_id,
@@ -39,4 +38,4 @@ def test_timeout(client_id: str, client_secret: str, access_token: Optional[str]
         cache=None,
     )
     with pytest.raises(ServiceError):
-        session.comic(comic_id=1)
+        session.get_comic(comic_id=1)

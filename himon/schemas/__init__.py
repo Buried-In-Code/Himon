@@ -1,15 +1,20 @@
-"""himon.schemas package entry file."""
+"""himon.schemas package entry file.
+
+This module provides the following classes:
+
+- BaseModel
+"""
 __all__ = ["BaseModel"]
 
-from pydantic import BaseModel as PydanticModel, Extra
+from pydantic import BaseModel as PydanticModel
 
 
-class BaseModel(PydanticModel):
+class BaseModel(
+    PydanticModel,
+    populate_by_name=True,
+    str_strip_whitespace=True,
+    validate_assignment=True,
+    revalidate_instances="always",
+    extra="ignore",
+):
     """Base model for himon resources."""
-
-    class Config:
-        """Any extra fields will be ignored, strings will have start/end whitespace stripped."""
-
-        anystr_strip_whitespace = True
-        allow_population_by_field_name = True
-        extra = Extra.ignore

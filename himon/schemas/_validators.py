@@ -6,8 +6,7 @@ from typing import Optional
 
 
 def to_optional_int(v: str) -> Optional[int]:
-    """
-    Convert a Str or 0 to None or return value.
+    """Convert a Str or 0 to None or return value.
 
     Args:
         v: Value to convert
@@ -23,8 +22,7 @@ def to_optional_int(v: str) -> Optional[int]:
 
 
 def to_optional_float(v: str) -> Optional[float]:
-    """
-    Convert a Str or 0 to None or return value.
+    """Convert a Str or 0 to None or return value.
 
     Args:
         v: Value to convert
@@ -42,8 +40,7 @@ def to_optional_float(v: str) -> Optional[float]:
 
 
 def to_bool(v: str) -> bool:
-    """
-    Convert a Str 0/1 to a bool.
+    """Convert a Str 0/1 to a bool.
 
     Args:
         v: Value to convert
@@ -56,12 +53,12 @@ def to_bool(v: str) -> bool:
         return False
     if str(v) == "1":
         return True
-    raise ValueError(f"Unknown bool value `{v}`.")
+    msg = f"Unknown bool value `{v}`."
+    raise ValueError(msg)
 
 
 def to_optional_str(v: str) -> Optional[str]:
-    """
-    Convert a Str to None or return html stripped value.
+    """Convert a Str to None or return html stripped value.
 
     Args:
         v: Value to convert

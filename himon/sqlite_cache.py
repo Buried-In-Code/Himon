@@ -1,48 +1,47 @@
-"""
-The SQLiteCache module.
+"""The SQLiteCache module.
 
 This module provides the following classes:
 
 - SQLiteCache
 """
+from __future__ import annotations
+
 __all__ = ["SQLiteCache"]
 import json
 import sqlite3
-from datetime import date, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 from himon import get_cache_root
 
 
 class SQLiteCache:
-    """
-    The SQLiteCache object to cache search results from League of Comic Geeks.
+    """The SQLiteCache object to cache search results from League of Comic Geeks.
 
     Args:
         path: Path to database.
         expiry: How long to keep cache results.
 
     Attributes:
-        expiry (Optional[int]): How long to keep cache results.
-        con (sqlite3.Connection): Database connection
+        expiry (int | None): How long to keep cache results.
+        connection (sqlite3.Connection): Database connection
     """
 
     def __init__(
-        self,
-        path: Path = None,
-        expiry: Optional[int] = 14,
+        self: SQLiteCache,
+        path: Path | None = None,
+        expiry: int | None = 14,
     ):
         self.expiry = expiry
-        self.con = sqlite3.connect(path or get_cache_root() / "cache.sqlite")
-        self.con.row_factory = sqlite3.Row
+        self.connection = sqlite3.connect(path or get_cache_root() / "cache.sqlite")
+        self.connection.row_factory = sqlite3.Row
 
-        self.con.execute("CREATE TABLE IF NOT EXISTS queries (query, response, query_date);")
+        self.connection.execute("CREATE TABLE IF NOT EXISTS queries (query, response, query_date);")
         self.delete()
 
-    def select(self, query: str) -> Dict[str, Any]:
-        """
-        Retrieve data from the cache database.
+    def select(self: SQLiteCache, query: str) -> dict[str, Any]:
+        """Retrieve data from the cache database.
 
         Args:
             query: Search string
@@ -50,35 +49,38 @@ class SQLiteCache:
             Empty dict or select results.
         """
         if self.expiry:
-            expiry = date.today() - timedelta(days=self.expiry)
-            cursor = self.con.execute(
+            expiry = datetime.now(tz=timezone.utc).astimezone().date() - timedelta(days=self.expiry)
+            cursor = self.connection.execute(
                 "SELECT * FROM queries WHERE query = ? and query_date > ?;",
                 (query, expiry.isoformat()),
             )
         else:
-            cursor = self.con.execute("SELECT * FROM queries WHERE query = ?;", (query,))
+            cursor = self.connection.execute("SELECT * FROM queries WHERE query = ?;", (query,))
         if results := cursor.fetchone():
             return json.loads(results["response"])
         return {}
 
-    def insert(self, query: str, response: Dict[str, Any]) -> None:
-        """
-        Insert data into the cache database.
+    def insert(self: SQLiteCache, query: str, response: dict[str, Any]) -> None:
+        """Insert data into the cache database.
 
         Args:
             query: Search string
             response: Data to save
         """
-        self.con.execute(
+        self.connection.execute(
             "INSERT INTO queries (query, response, query_date) VALUES (?, ?, ?);",
-            (query, json.dumps(response), date.today().isoformat()),
+            (
+                query,
+                json.dumps(response),
+                datetime.now(tz=timezone.utc).astimezone().date().isoformat(),
+            ),
         )
-        self.con.commit()
+        self.connection.commit()
 
-    def delete(self) -> None:
+    def delete(self: SQLiteCache) -> None:
         """Remove all expired data from the cache database."""
         if not self.expiry:
             return
-        expiry = date.today() - timedelta(days=self.expiry)
-        self.con.execute("DELETE FROM queries WHERE query_date < ?;", (expiry.isoformat(),))
-        self.con.commit()
+        expiry = datetime.now(tz=timezone.utc).astimezone().date() - timedelta(days=self.expiry)
+        self.connection.execute("DELETE FROM queries WHERE query_date < ?;", (expiry.isoformat(),))
+        self.connection.commit()
