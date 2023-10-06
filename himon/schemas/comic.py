@@ -60,7 +60,7 @@ class KeyEvent(BaseModel):
     parent_name: Optional[str] = None
     type: int  # How is it different to type_id?  # noqa: A003
     type_id: int
-    universe_name: Optional[str] = None
+    universe_name: str
 
     @field_validator("note", "parent_name", mode="before")
     def _to_optional_str(cls: Type["KeyEvent"], v: str) -> Optional[str]:
@@ -120,7 +120,7 @@ class Character(BaseModel):
     name: str
     parent_id: Optional[int] = None
     parent_name: Optional[str] = None
-    publisher_name: Optional[str] = None
+    publisher_name: str
     type_id: int
     universe_id: Optional[int] = None
     universe_name: Optional[str] = None

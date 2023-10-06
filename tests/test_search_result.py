@@ -11,9 +11,9 @@ def test_search_result(session: LeagueofComicGeeks) -> None:
     """Test using the search endpoint with a valid comic title."""
     results = session.search(search_term="Blackest Night #1")
     assert len(results) != 0
-    result = next(x for x in results if x.comic_id == 2710631)
+    result = next(x for x in results if x.id == 2710631)
     assert result is not None
-    assert result.comic_id == 2710631
+    assert result.id == 2710631
 
     assert result.format == "Comic"
     assert result.is_enabled is True
