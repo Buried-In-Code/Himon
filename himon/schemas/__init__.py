@@ -18,4 +18,3 @@ class BaseModel(
     extra="ignore",
 ):
     """Base model for himon resources."""
-    pass
