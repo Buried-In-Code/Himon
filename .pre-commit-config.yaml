@@ -1,7 +1,8 @@
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.0.292
+    rev: v0.3.3
     hooks:
+      - id: ruff-format
       - id: ruff
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.17
@@ -38,10 +39,6 @@ repos:
       - id: trailing-whitespace
         args:
           - --markdown-linebreak-ext=md
-  - repo: https://github.com/psf/black
-    rev: 23.9.1
-    hooks:
-      - id: black
   - repo: https://github.com/pappasam/toml-sort
     rev: v0.23.1
     hooks:

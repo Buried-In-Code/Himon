@@ -39,17 +39,17 @@ session = LeagueofComicGeeks(client_id="Client Id", client_secret="Client Secret
 if not session.access_token:
   session.access_token = session.generate_access_token()
 
-# Search for Comic
-for search in session.search(search_term="Blackest Night"):
-    print(f"Search result: {search.publisher_name} - {search.series_name} - {search.title}")
+# Search for Issue
+for result in session.search(search_term="Blackest Night"):
+  print(f"Result: {result.publisher_name} - {result.series_name} - {result.title}")
 
 # Get Series by id
-series = session.series(series_id=100096)
-print(f"Series: {series.series_id} - {series.title}")
+series = session.get_series(series_id=100096)
+print(f"Series: {series.id} - {series.title}")
 
-# Get Comic by id
-comic = session.comic(comic_id=2710631)
-print(f"Comic: {comic.comic_id} - {comic.title}")
+# Get Issue by id
+issue = session.get_issue(issue_id=2710631)
+print(f"Issue: {issue.id} - {issue.title}")
 ```
 
 ## Bugs/Requests

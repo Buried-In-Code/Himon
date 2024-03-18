@@ -2,6 +2,7 @@
 
 This module contains tests for SearchResult objects.
 """
+
 from datetime import date
 
 from himon.league_of_comic_geeks import LeagueofComicGeeks
@@ -16,7 +17,6 @@ def test_search_result(session: LeagueofComicGeeks) -> None:
     assert result.id == 2710631
 
     assert result.format == "Comic"
-    assert result.is_enabled is True
     assert result.is_variant is False
     assert result.parent_id is None
     assert result.parent_title is None
@@ -28,5 +28,5 @@ def test_search_result(session: LeagueofComicGeeks) -> None:
     assert result.series_name == "Blackest Night"
     assert result.series_volume is None
     assert result.title == "Blackest Night #1"
-    assert result.year_begin == 2009
-    assert result.year_end == 2010
+    assert result.series_begin == 2009
+    assert result.series_end == 2010

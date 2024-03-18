@@ -2,27 +2,27 @@
 
 This module contains tests for Comic objects.
 """
+
 from datetime import date, datetime
 
 from himon.league_of_comic_geeks import LeagueofComicGeeks
 
 
-def test_comic(session: LeagueofComicGeeks) -> None:
+def test_issue(session: LeagueofComicGeeks) -> None:
     """Test using the comic endpoint with a valid comic_id."""
-    result = session.get_comic(comic_id=2710631)
+    result = session.get_issue(issue_id=2710631)
     assert result is not None
     assert result.id == 2710631
 
-    assert len(result.characters) == 109
+    assert len(result.characters) == 183
     assert len(result.collected_in) == 12
     assert len(result.creators) == 8
     assert result.date_added.astimezone() == datetime(2012, 7, 2, 23, 15, 17).astimezone()
     assert result.format == "Comic"
-    assert result.is_enabled is True
     assert result.is_nsfw is False
     assert result.is_variant is False
     assert result.isbn is None
-    assert len(result.key_events) == 6
+    assert len(result.keys) == 14
     assert result.page_count == 48
     assert result.parent_id is None
     assert result.parent_title is None
@@ -36,7 +36,7 @@ def test_comic(session: LeagueofComicGeeks) -> None:
 
 def test_upc_alpha_only(session: LeagueofComicGeeks) -> None:
     """Test the comic endpoint with a comic that has an invalid character in the upc."""
-    result = session.get_comic(comic_id=6257084)
+    result = session.get_issue(issue_id=6257084)
     assert result is not None
 
     assert result.upc is None

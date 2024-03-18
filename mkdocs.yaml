@@ -57,8 +57,8 @@ nav:
       - sqlite_cache: himon/sqlite_cache.md
   - himon.schemas:
       - Package: himon/schemas/__init__.md
-      - comic: himon/schemas/comic.md
-      - search_result: himon/schemas/search_result.md
+      - comic: himon/schemas/issue.md
+      - search_result: himon/schemas/generic.md
       - series: himon/schemas/series.md
 
 plugins:
