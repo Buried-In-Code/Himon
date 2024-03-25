@@ -2,6 +2,7 @@
 
 This module contains tests for SearchResult objects.
 """
+
 from datetime import date
 
 from himon.league_of_comic_geeks import LeagueofComicGeeks
