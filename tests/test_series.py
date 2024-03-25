@@ -2,6 +2,7 @@
 
 This module contains tests for Series objects.
 """
+
 from datetime import datetime
 
 from himon.league_of_comic_geeks import LeagueofComicGeeks
