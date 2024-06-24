@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.0.292
+    rev: v0.4.10
     hooks:
       - id: ruff
   - repo: https://github.com/executablebooks/mdformat
@@ -14,7 +14,7 @@ repos:
           - --number
           - --wrap=keep
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
       - id: check-ast
       - id: check-builtin-literals
@@ -39,7 +39,7 @@ repos:
         args:
           - --markdown-linebreak-ext=md
   - repo: https://github.com/psf/black
-    rev: 23.9.1
+    rev: 24.4.2
     hooks:
       - id: black
   - repo: https://github.com/pappasam/toml-sort
