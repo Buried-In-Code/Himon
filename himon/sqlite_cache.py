@@ -4,6 +4,7 @@ This module provides the following classes:
 
 - SQLiteCache
 """
+
 from __future__ import annotations
 
 __all__ = ["SQLiteCache"]

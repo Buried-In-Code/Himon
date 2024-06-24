@@ -4,6 +4,7 @@ This module provides the following classes:
 
 - Series
 """
+
 __all__ = ["Series"]
 from datetime import datetime
 from typing import Optional, Type
@@ -34,7 +35,7 @@ class Series(BaseModel):
     date_added: datetime
     date_modified: datetime
     description: Optional[str] = None
-    id: int  # noqa: A003
+    id: int
     is_enabled: bool = Field(alias="enabled")
     publisher_id: int
     publisher_name: str

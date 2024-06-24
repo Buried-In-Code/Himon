@@ -4,6 +4,7 @@ This module provides the following classes:
 
 - Comic
 """
+
 __all__ = ["Comic"]
 from datetime import date, datetime
 from typing import Any, Dict, List, Optional, Type
@@ -28,7 +29,7 @@ class Variant(BaseModel):
     """
 
     date_modified: datetime
-    id: int  # noqa: A003
+    id: int
     price: Optional[float] = None
     release_date: date = Field(alias="date_release")
     title: str
@@ -54,11 +55,11 @@ class KeyEvent(BaseModel):
     """
 
     character_id: int
-    id: int  # noqa: A003
+    id: int
     name: str
     note: Optional[str] = None
     parent_name: Optional[str] = None
-    type: int  # How is it different to type_id?  # noqa: A003
+    type: int  # How is it different to type_id?
     type_id: int
     universe_name: str
 
@@ -78,7 +79,7 @@ class Creator(BaseModel):
         role_id: List of role ids the Creator has in the comic. Separated by `,`.
     """
 
-    id: int  # noqa: A003
+    id: int
     name: str
     role: str
     role_id: str
@@ -115,7 +116,7 @@ class Character(BaseModel):
     date_added: datetime
     date_modified: datetime
     full_name: str
-    id: int  # noqa: A003
+    id: int
     is_enabled: bool = Field(alias="enabled")
     name: str
     parent_id: Optional[int] = None
@@ -176,8 +177,8 @@ class Comic(BaseModel):
     date_added: datetime
     date_modified: datetime
     description: Optional[str] = None
-    format: str  # noqa: A003
-    id: int  # noqa: A003
+    format: str
+    id: int
     is_enabled: bool = Field(alias="enabled")
     is_nsfw: bool = Field(alias="nsfw")
     is_variant: bool = Field(alias="variant")

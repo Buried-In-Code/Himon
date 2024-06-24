@@ -2,6 +2,7 @@
 
 This module contains tests for Exceptions.
 """
+
 from __future__ import annotations
 
 import pytest

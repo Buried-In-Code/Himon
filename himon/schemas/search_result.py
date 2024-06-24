@@ -4,6 +4,7 @@ This module provides the following classes:
 
 - SearchResult
 """
+
 __all__ = ["SearchResult"]
 from datetime import date, datetime
 from typing import Optional, Type
@@ -40,8 +41,8 @@ class SearchResult(BaseModel):
 
     date_modified: datetime
     description: Optional[str] = None
-    format: str  # noqa: A003
-    id: int  # noqa: A003
+    format: str
+    id: int
     is_enabled: bool = Field(alias="enabled")
     is_variant: bool = Field(alias="variant")
     parent_id: Optional[int] = None

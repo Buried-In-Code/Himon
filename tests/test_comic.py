@@ -2,6 +2,7 @@
 
 This module contains tests for Comic objects.
 """
+
 from datetime import date, datetime
 
 from himon.league_of_comic_geeks import LeagueofComicGeeks
