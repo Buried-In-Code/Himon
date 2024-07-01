@@ -4,6 +4,7 @@ This module provides the following classes:
 
 - LeagueofComicGeeks
 """
+
 from __future__ import annotations
 
 __all__ = ["LeagueofComicGeeks"]
@@ -19,7 +20,7 @@ from requests.exceptions import ConnectionError, HTTPError, JSONDecodeError, Rea
 from himon import __version__
 from himon.exceptions import AuthenticationError, ServiceError
 from himon.schemas.comic import Comic
-from himon.schemas.search_result import SearchResult
+from himon.schemas.generic import GenericComic
 from himon.schemas.series import Series
 from himon.sqlite_cache import SQLiteCache
 
@@ -68,9 +69,7 @@ class LeagueofComicGeeks:
     @sleep_and_retry
     @limits(calls=20, period=MINUTE)
     def _perform_get_request(
-        self: LeagueofComicGeeks,
-        url: str,
-        params: dict[str, str] | None = None,
+        self: LeagueofComicGeeks, url: str, params: dict[str, str] | None = None
     ) -> dict[str, Any]:
         """Make GET request to League of Comic Geeks.
 
@@ -153,9 +152,7 @@ class LeagueofComicGeeks:
     @sleep_and_retry
     @limits(calls=20, period=MINUTE)
     def _str_get_request(
-        self: LeagueofComicGeeks,
-        endpoint: str,
-        params: dict[str, str] | None = None,
+        self: LeagueofComicGeeks, endpoint: str, params: dict[str, str] | None = None
     ) -> str:
         """Make GET request to League of Comic Geeks, expecting a str response.
 
@@ -211,7 +208,7 @@ class LeagueofComicGeeks:
         self.headers["X-API-KEY"] = self.client_secret
         return self._str_get_request("/authorize/format/json")
 
-    def search(self: LeagueofComicGeeks, search_term: str) -> list[SearchResult]:
+    def search(self: LeagueofComicGeeks, search_term: str) -> list[GenericComic]:
         """Request a list of search results.
 
         Args:
@@ -225,7 +222,7 @@ class LeagueofComicGeeks:
         try:
             self.headers["X-API-KEY"] = self.access_token
             results = self._get_request("/search/format/json", params={"query": search_term})
-            adapter = TypeAdapter(List[SearchResult])
+            adapter = TypeAdapter(List[GenericComic])
             return adapter.validate_python(results)
         except ValidationError as err:
             raise ServiceError(err) from err
@@ -244,10 +241,7 @@ class LeagueofComicGeeks:
         """
         try:
             self.headers["X-API-KEY"] = self.access_token
-            result = self._get_request(
-                "/series/format/json",
-                params={"series_id": str(series_id)},
-            )
+            result = self._get_request("/series/format/json", params={"series_id": str(series_id)})
             if "details" in result:
                 result = result["details"]
             adapter = TypeAdapter(Series)
@@ -269,10 +263,7 @@ class LeagueofComicGeeks:
         """
         try:
             self.headers["X-API-KEY"] = self.access_token
-            result = self._get_request(
-                "/comic/format/json",
-                params={"comic_id": str(comic_id)},
-            )
+            result = self._get_request("/comic/format/json", params={"comic_id": str(comic_id)})
             adapter = TypeAdapter(Comic)
             return adapter.validate_python(result)
         except ValidationError as err:

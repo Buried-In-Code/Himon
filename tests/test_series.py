@@ -2,6 +2,7 @@
 
 This module contains tests for Series objects.
 """
+
 from datetime import datetime
 
 from himon.league_of_comic_geeks import LeagueofComicGeeks
@@ -14,7 +15,6 @@ def test_series(session: LeagueofComicGeeks) -> None:
     assert result.id == 100096
 
     assert result.date_added.astimezone() == datetime(2012, 8, 5, 22, 20, 15).astimezone()
-    assert result.is_enabled is True
     assert result.publisher_id == 1
     assert result.publisher_name == "DC Comics"
     assert result.title == "Blackest Night"

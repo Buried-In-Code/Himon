@@ -58,7 +58,7 @@ nav:
   - himon.schemas:
       - Package: himon/schemas/__init__.md
       - comic: himon/schemas/comic.md
-      - search_result: himon/schemas/search_result.md
+      - generic: himon/schemas/generic.md
       - series: himon/schemas/series.md
 
 plugins:
