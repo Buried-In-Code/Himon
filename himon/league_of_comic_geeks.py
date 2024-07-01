@@ -19,8 +19,8 @@ from requests.exceptions import ConnectionError, HTTPError, JSONDecodeError, Rea
 
 from himon import __version__
 from himon.exceptions import AuthenticationError, ServiceError
-from himon.schemas.generic import GenericIssue
-from himon.schemas.issue import Issue
+from himon.schemas.comic import Comic
+from himon.schemas.generic import GenericComic
 from himon.schemas.series import Series
 from himon.sqlite_cache import SQLiteCache
 
@@ -208,7 +208,7 @@ class LeagueofComicGeeks:
         self.headers["X-API-KEY"] = self.client_secret
         return self._str_get_request("/authorize/format/json")
 
-    def search(self: LeagueofComicGeeks, search_term: str) -> list[GenericIssue]:
+    def search(self: LeagueofComicGeeks, search_term: str) -> list[GenericComic]:
         """Request a list of search results.
 
         Args:
@@ -222,7 +222,7 @@ class LeagueofComicGeeks:
         try:
             self.headers["X-API-KEY"] = self.access_token
             results = self._get_request("/search/format/json", params={"query": search_term})
-            adapter = TypeAdapter(List[GenericIssue])
+            adapter = TypeAdapter(List[GenericComic])
             return adapter.validate_python(results)
         except ValidationError as err:
             raise ServiceError(err) from err
@@ -249,22 +249,22 @@ class LeagueofComicGeeks:
         except ValidationError as err:
             raise ServiceError(err) from err
 
-    def get_issue(self: LeagueofComicGeeks, issue_id: int) -> Issue:
+    def get_comic(self: LeagueofComicGeeks, comic_id: int) -> Comic:
         """Request data for a Comic based on its id.
 
         Args:
-            issue_id: The Issue id.
+            comic_id: The Comic id.
 
         Returns:
-            A Issue object.
+            A Comic object.
 
         Raises:
             ServiceError: If there is an issue with validating the response.
         """
         try:
             self.headers["X-API-KEY"] = self.access_token
-            result = self._get_request("/comic/format/json", params={"comic_id": str(issue_id)})
-            adapter = TypeAdapter(Issue)
+            result = self._get_request("/comic/format/json", params={"comic_id": str(comic_id)})
+            adapter = TypeAdapter(Comic)
             return adapter.validate_python(result)
         except ValidationError as err:
             raise ServiceError(err) from err

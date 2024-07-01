@@ -33,7 +33,8 @@ pip install Himon
 from himon.league_of_comic_geeks import LeagueofComicGeeks
 from himon.sqlite_cache import SQLiteCache
 
-session = LeagueofComicGeeks(client_id="Client Id", client_secret="Client Secret", access_token=None, cache=SQLiteCache())
+session = LeagueofComicGeeks(client_id="Client Id", client_secret="Client Secret",
+                             access_token=None, cache=SQLiteCache())
 
 # Generate an access token if not supplied
 if not session.access_token:
@@ -48,7 +49,7 @@ series = session.get_series(series_id=100096)
 print(f"Series: {series.id} - {series.title}")
 
 # Get Issue by id
-issue = session.get_issue(issue_id=2710631)
+issue = session.get_comic(comic_id=2710631)
 print(f"Issue: {issue.id} - {issue.title}")
 ```
 

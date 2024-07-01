@@ -2,12 +2,12 @@
 
 This module provides the following classes:
 
-- Issue
+- Comic
 """
 
 from __future__ import annotations
 
-__all__ = ["Issue"]
+__all__ = ["Comic"]
 from datetime import date, datetime
 from typing import Any
 
@@ -15,7 +15,7 @@ from pydantic import Field, HttpUrl, field_validator
 
 from himon.schemas import BaseModel
 from himon.schemas._validators import to_bool, to_optional_float, to_optional_int, to_optional_str
-from himon.schemas.generic import GenericCover, GenericIssue
+from himon.schemas.generic import GenericComic, GenericCover
 from himon.schemas.series import Series
 
 
@@ -181,7 +181,7 @@ class Variant(BaseModel):
     title: str
 
     @field_validator("date_foc", mode="before")
-    def _to_optional_date(cls: type[Issue], v: str) -> date | None:
+    def _to_optional_date(cls: type[Variant], v: str) -> date | None:
         """Pydantic validator to convert a Str or 0 to None or return date."""
         return to_optional_float(v)
 
@@ -191,7 +191,7 @@ class Variant(BaseModel):
         return to_optional_float(v)
 
 
-class Issue(BaseModel):
+class Comic(BaseModel):
     """The Issue object contains information for an Issue.
 
     Attributes:
@@ -231,8 +231,8 @@ class Issue(BaseModel):
 
     banner: HttpUrl
     characters: list[Character] = Field(default_factory=list)
-    collected_in: list[GenericIssue] = Field(default_factory=list)
-    collected_issues: list[GenericIssue] = Field(default_factory=list)
+    collected_in: list[GenericComic] = Field(default_factory=list)
+    collected_issues: list[GenericComic] = Field(default_factory=list)
     covers: list[GenericCover] = Field(default_factory=list)
     creators: list[Creator] = Field(default_factory=list)
     keys: list[KeyEvent] = Field(default_factory=list)
@@ -262,33 +262,33 @@ class Issue(BaseModel):
     title: str
     upc: int | None = None
 
-    def __init__(self: Issue, **data: Any):
+    def __init__(self: Comic, **data: Any):
         for key, value in data["details"].items():
             data[key] = value
         del data["details"]
         super().__init__(**data)
 
     @field_validator("is_nsfw", "is_variant", mode="before")
-    def _to_bool(cls: type[Issue], v: str) -> bool:
+    def _to_bool(cls: type[Comic], v: str) -> bool:
         """Pydantic validator to convert a Str 0/1 to a bool."""
         return to_bool(v)
 
     @field_validator("date_cover", "date_foc", mode="before")
-    def _to_optional_date(cls: type[Issue], v: str) -> date | None:
+    def _to_optional_date(cls: type[Comic], v: str) -> date | None:
         """Pydantic validator to convert a Str or 0 to None or return date."""
         return to_optional_float(v)
 
     @field_validator("price", mode="before")
-    def _to_optional_float(cls: type[Issue], v: str) -> float | None:
+    def _to_optional_float(cls: type[Comic], v: str) -> float | None:
         """Pydantic validator to convert a Str or 0 to None or return float."""
         return to_optional_float(v)
 
     @field_validator("isbn", "parent_id", "upc", mode="before")
-    def _to_optional_int(cls: type[Issue], v: str) -> int | None:
+    def _to_optional_int(cls: type[Comic], v: str) -> int | None:
         """Pydantic validator to convert a Str or 0 to None or return int."""
         return to_optional_int(v)
 
     @field_validator("description", "parent_title", mode="before")
-    def _to_optional_str(cls: type[Issue], v: str) -> str | None:
+    def _to_optional_str(cls: type[Comic], v: str) -> str | None:
         """Pydantic validator to convert a Str to None or return html stripped value."""
         return to_optional_str(v)

@@ -8,9 +8,9 @@ from datetime import date, datetime
 from himon.league_of_comic_geeks import LeagueofComicGeeks
 
 
-def test_issue(session: LeagueofComicGeeks) -> None:
+def test_comic(session: LeagueofComicGeeks) -> None:
     """Test using the comic endpoint with a valid comic_id."""
-    result = session.get_issue(issue_id=2710631)
+    result = session.get_comic(comic_id=2710631)
     assert result is not None
     assert result.id == 2710631
 
@@ -36,7 +36,7 @@ def test_issue(session: LeagueofComicGeeks) -> None:
 
 def test_upc_alpha_only(session: LeagueofComicGeeks) -> None:
     """Test the comic endpoint with a comic that has an invalid character in the upc."""
-    result = session.get_issue(issue_id=6257084)
+    result = session.get_comic(comic_id=6257084)
     assert result is not None
 
     assert result.upc is None

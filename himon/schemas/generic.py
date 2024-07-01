@@ -2,13 +2,13 @@
 
 This module provides the following classes:
 
-- GenericIssue
+- GenericComic
 - GenericCover
 """
 
 from __future__ import annotations
 
-__all__ = ["GenericIssue", "GenericCover"]
+__all__ = ["GenericComic", "GenericCover"]
 from datetime import date, datetime
 
 from pydantic import Field, field_validator
@@ -17,7 +17,7 @@ from himon.schemas import BaseModel
 from himon.schemas._validators import to_bool, to_optional_float, to_optional_int, to_optional_str
 
 
-class GenericIssue(BaseModel):
+class GenericComic(BaseModel):
     """The GenericIssue object contains the base for related/link issues.
 
     Attributes:
@@ -61,27 +61,27 @@ class GenericIssue(BaseModel):
     title: str
 
     @field_validator("is_variant", mode="before")
-    def _to_bool(cls: type[GenericIssue], v: str) -> bool:
+    def _to_bool(cls: type[GenericComic], v: str) -> bool:
         """Pydantic validator to convert a Str 0/1 to a bool."""
         return to_bool(v)
 
     @field_validator("price", mode="before")
-    def _to_optional_float(cls: type[GenericIssue], v: str) -> float | None:
+    def _to_optional_float(cls: type[GenericComic], v: str) -> float | None:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_float(v)
 
     @field_validator("parent_id", "series_volume", "series_end", mode="before")
-    def _to_optional_int(cls: type[GenericIssue], v: str) -> int | None:
+    def _to_optional_int(cls: type[GenericComic], v: str) -> int | None:
         """Pydantic validator to convert a Str or 0 to None or return value."""
         return to_optional_int(v)
 
     @field_validator("description", "parent_title", mode="before")
-    def _to_optional_str(cls: type[GenericIssue], v: str) -> str | None:
+    def _to_optional_str(cls: type[GenericComic], v: str) -> str | None:
         """Pydantic validator to convert a Str to None or return html stripped value."""
         return to_optional_str(v)
 
 
-class GenericCover(GenericIssue):
+class GenericCover(GenericComic):
     """The GenericCover object extends GenericIssue by including the type of cover used.
 
     Attributes:

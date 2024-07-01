@@ -20,7 +20,7 @@ def test_unauthorized() -> None:
         cache=None,
     )
     with pytest.raises(AuthenticationError):
-        session.get_issue(issue_id=1)
+        session.get_comic(comic_id=1)
 
 
 def test_not_found(session: LeagueofComicGeeks) -> None:
@@ -39,4 +39,4 @@ def test_timeout(client_id: str, client_secret: str, access_token: str | None) -
         cache=None,
     )
     with pytest.raises(ServiceError):
-        session.get_issue(issue_id=1)
+        session.get_comic(comic_id=1)
