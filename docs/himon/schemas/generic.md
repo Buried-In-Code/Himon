@@ -1,4 +1,4 @@
 # Generic
 
-::: himon.schemas.generic.GenericIssue
+::: himon.schemas.generic.GenericComic
 ::: himon.schemas.generic.GenericCover
