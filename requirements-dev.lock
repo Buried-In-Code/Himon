@@ -163,9 +163,7 @@ tomli==2.0.1
     # via pytest
     # via tox
 tox==4.15.1
-    # via himon
 tox-rye @ git+https://github.com/bluss/tox-rye@d1348e996d642e947cd0fb158ecdbcfe0f386af3
-    # via himon
 typing-extensions==4.12.2
     # via annotated-types
     # via mkdocstrings

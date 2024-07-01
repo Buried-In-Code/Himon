@@ -1,6 +1,6 @@
 """himon package entry file."""
 
-__version__ = "0.6.0"
+__version__ = "0.6.1"
 __all__ = ["__version__", "get_cache_root"]
 
 import os
