@@ -5,17 +5,21 @@ This module provides the following classes:
 - LeagueofComicGeeks
 """
 
-from __future__ import annotations
-
 __all__ = ["LeagueofComicGeeks"]
+
 import platform
-from typing import Any, List
+from typing import Any, Optional
 from urllib.parse import urlencode
 
 from pydantic import TypeAdapter, ValidationError
 from ratelimit import limits, sleep_and_retry
 from requests import get
-from requests.exceptions import ConnectionError, HTTPError, JSONDecodeError, ReadTimeout
+from requests.exceptions import (
+    ConnectionError,  # noqa: A004
+    HTTPError,
+    JSONDecodeError,
+    ReadTimeout,
+)
 
 from himon import __version__
 from himon.exceptions import AuthenticationError, ServiceError
@@ -48,12 +52,12 @@ class LeagueofComicGeeks:
     API_URL = "https://leagueofcomicgeeks.com/api"
 
     def __init__(
-        self: LeagueofComicGeeks,
+        self,
         client_id: str,
         client_secret: str,
-        access_token: str | None = None,
+        access_token: Optional[str] = None,
         timeout: int = 30,
-        cache: SQLiteCache | None = None,
+        cache: Optional[SQLiteCache] = None,
     ):
         self.headers = {
             "Accept": "application/json",
@@ -69,7 +73,7 @@ class LeagueofComicGeeks:
     @sleep_and_retry
     @limits(calls=20, period=MINUTE)
     def _perform_get_request(
-        self: LeagueofComicGeeks, url: str, params: dict[str, str] | None = None
+        self, url: str, params: Optional[dict[str, str]] = None
     ) -> dict[str, Any]:
         """Make GET request to League of Comic Geeks.
 
@@ -93,29 +97,20 @@ class LeagueofComicGeeks:
             response.raise_for_status()
             return response.json()
         except ConnectionError as err:
-            msg = f"Unable to connect to `{url}`"
-            raise ServiceError(msg) from err
+            raise ServiceError("Unable to connect to '%s'", url) from err
         except HTTPError as err:
             if err.response.status_code == 403:
-                msg = "Invalid API Key"
-                raise AuthenticationError(msg) from err
+                raise AuthenticationError("Invalid Access Token") from err
             if err.response.status_code == 404:
-                msg = "Unknown endpoint"
-                raise ServiceError(msg) from err
-            msg = f"{err.response.status_code}: {err.response.text}"
-            raise ServiceError(msg) from err
+                raise ServiceError("Unknown Endpoint") from err
+            raise ServiceError("%s: %s", err.response.status_code, err.response.text) from err
         except JSONDecodeError as err:
-            msg = f"Unable to parse response from `{url}` as Json"
-            raise ServiceError(msg) from err
+            raise ServiceError("Unable to parse response from '%s' as Json", url) from err
         except ReadTimeout as err:
-            msg = "Service took too long to respond"
-            raise ServiceError(msg) from err
+            raise ServiceError("Service took too long to respond") from err
 
     def _get_request(
-        self: LeagueofComicGeeks,
-        endpoint: str,
-        params: dict[str, str] | None = None,
-        skip_cache: bool = False,
+        self, endpoint: str, params: Optional[dict[str, str]] = None, skip_cache: bool = False
     ) -> dict[str, Any]:
         """Check cache or make GET request to League of Comic Geeks.
 
@@ -151,9 +146,7 @@ class LeagueofComicGeeks:
 
     @sleep_and_retry
     @limits(calls=20, period=MINUTE)
-    def _str_get_request(
-        self: LeagueofComicGeeks, endpoint: str, params: dict[str, str] | None = None
-    ) -> str:
+    def _str_get_request(self, endpoint: str, params: Optional[dict[str, str]] = None) -> str:
         """Make GET request to League of Comic Geeks, expecting a str response.
 
         Args:
@@ -178,25 +171,19 @@ class LeagueofComicGeeks:
             response.raise_for_status()
             return response.json()
         except ConnectionError as err:
-            msg = f"Unable to connect to `{url}`"
-            raise ServiceError(msg) from err
+            raise ServiceError("Unable to connect to '%s'", url) from err
         except HTTPError as err:
             if err.response.status_code == 403:
-                msg = "Invalid API Key"
-                raise AuthenticationError(msg) from err
+                raise AuthenticationError("Invalid Access Token") from err
             if err.response.status_code == 404:
-                msg = "Unknown endpoint"
-                raise ServiceError(msg) from err
-            msg = f"{err.response.status_code}: {err.response.text}"
-            raise ServiceError(msg) from err
+                raise ServiceError("Unknown endpoint") from err
+            raise ServiceError("%s: %s", err.response.status_code, err.response.text) from err
         except JSONDecodeError as err:
-            msg = f"Unable to parse response from `{url}` as Json"
-            raise ServiceError(msg) from err
+            raise ServiceError("Unable to parse response from '%s' as Json") from err
         except ReadTimeout as err:
-            msg = "Service took too long to respond"
-            raise ServiceError(msg) from err
+            raise ServiceError("Service took too long to respond") from err
 
-    def generate_access_token(self: LeagueofComicGeeks) -> str:
+    def generate_access_token(self) -> str:
         """Request an access token.
 
         Returns:
@@ -208,7 +195,7 @@ class LeagueofComicGeeks:
         self.headers["X-API-KEY"] = self.client_secret
         return self._str_get_request("/authorize/format/json")
 
-    def search(self: LeagueofComicGeeks, search_term: str) -> list[GenericComic]:
+    def search(self, search_term: str) -> list[GenericComic]:
         """Request a list of search results.
 
         Args:
@@ -222,12 +209,11 @@ class LeagueofComicGeeks:
         try:
             self.headers["X-API-KEY"] = self.access_token
             results = self._get_request("/search/format/json", params={"query": search_term})
-            adapter = TypeAdapter(List[GenericComic])
-            return adapter.validate_python(results)
+            return TypeAdapter(list[GenericComic]).validate_python(results)
         except ValidationError as err:
             raise ServiceError(err) from err
 
-    def get_series(self: LeagueofComicGeeks, series_id: int) -> Series:
+    def get_series(self, series_id: int) -> Series:
         """Request data for a Series based on its id.
 
         Args:
@@ -244,12 +230,11 @@ class LeagueofComicGeeks:
             result = self._get_request("/series/format/json", params={"series_id": str(series_id)})
             if "details" in result:
                 result = result["details"]
-            adapter = TypeAdapter(Series)
-            return adapter.validate_python(result)
+            return TypeAdapter(Series).validate_python(result)
         except ValidationError as err:
             raise ServiceError(err) from err
 
-    def get_comic(self: LeagueofComicGeeks, comic_id: int) -> Comic:
+    def get_comic(self, comic_id: int) -> Comic:
         """Request data for a Comic based on its id.
 
         Args:
@@ -264,7 +249,6 @@ class LeagueofComicGeeks:
         try:
             self.headers["X-API-KEY"] = self.access_token
             result = self._get_request("/comic/format/json", params={"comic_id": str(comic_id)})
-            adapter = TypeAdapter(Comic)
-            return adapter.validate_python(result)
+            return TypeAdapter(Comic).validate_python(result)
         except ValidationError as err:
             raise ServiceError(err) from err

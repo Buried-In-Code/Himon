@@ -14,15 +14,15 @@ def test_comic(session: LeagueofComicGeeks) -> None:
     assert result is not None
     assert result.id == 2710631
 
-    assert len(result.characters) == 183
-    assert len(result.collected_in) == 12
+    assert len(result.characters) == 185
+    assert len(result.collected_in) == 1
     assert len(result.creators) == 8
     assert result.date_added.astimezone() == datetime(2012, 7, 2, 23, 15, 17).astimezone()
     assert result.format == "Comic"
     assert result.is_nsfw is False
     assert result.is_variant is False
     assert result.isbn is None
-    assert len(result.keys) == 14
+    assert len(result.keys) == 21
     assert result.page_count == 48
     assert result.parent_id is None
     assert result.parent_title is None

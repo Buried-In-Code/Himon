@@ -3,14 +3,13 @@ site_url: https://himon.readthedocs.io/en/latest/
 site_description: A Python wrapper for League of Comic Geeks.
 site_author: Jonah Jackson
 
-copyright: GPL-3.0
+copyright: MIT
 
 repo_url: https://github.com/Buried-In-Code/Himon
 repo_name: Buried-In-Code/Himon
 
 theme:
   name: material
-  favicon: img/favicon.ico
   features:
     - content.code.copy
     - navigation.expand
