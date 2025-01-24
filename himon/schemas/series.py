@@ -5,15 +5,15 @@ This module provides the following classes:
 - Series
 """
 
-from __future__ import annotations
-
 __all__ = ["Series"]
-from datetime import datetime
 
-from pydantic import Field, field_validator
+from datetime import datetime
+from typing import Annotated, Optional
+
+from pydantic import BeforeValidator, Field
 
 from himon.schemas import BaseModel
-from himon.schemas._validators import to_optional_int, to_optional_str
+from himon.schemas._validators import ensure_bool, ensure_int, ensure_str
 
 
 class Series(BaseModel):
@@ -27,6 +27,7 @@ class Series(BaseModel):
         description: Description of the Series.
         first_issue_id: ID of the first Issue in the Series.
         id: Identifier used by League of Comic Geeks.
+        is_enabled:
         map_to_id:
         publisher_id: The publisher id of the Series.
         publisher_name: The publisher name of the Series.
@@ -43,9 +44,10 @@ class Series(BaseModel):
     cover_id: int = Field(alias="cover")
     date_added: datetime
     date_modified: datetime
-    description: str | None = None
+    description: Annotated[Optional[str], BeforeValidator(ensure_str)] = None
     first_issue_id: int = Field(alias="comic_id")
     id: int
+    is_enabled: Annotated[bool, Field(alias="enabled"), BeforeValidator(ensure_bool)]
     map_to_id: int
     publisher_id: int
     publisher_name: str
@@ -53,16 +55,6 @@ class Series(BaseModel):
     series_string: str
     title: str
     title_sort: str
-    volume: int | None = None
+    volume: Annotated[Optional[int], BeforeValidator(ensure_int)] = None
     year_begin: int
-    year_end: int | None = None
-
-    @field_validator("volume", "year_end", mode="before")
-    def _to_optional_int(cls: type[Series], v: str) -> int | None:
-        """Pydantic validator to convert a Str or 0 to None or return value."""
-        return to_optional_int(v)
-
-    @field_validator("description", mode="before")
-    def _to_optional_str(cls: type[Series], v: str) -> str | None:
-        """Pydantic validator to convert a Str to None or return html stripped value."""
-        return to_optional_str(v)
+    year_end: Annotated[Optional[int], BeforeValidator(ensure_int)] = None

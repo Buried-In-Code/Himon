@@ -5,14 +5,13 @@ This module provides the following classes:
 - SQLiteCache
 """
 
-from __future__ import annotations
-
 __all__ = ["SQLiteCache"]
+
 import json
 import sqlite3
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 from himon import get_cache_root
 
@@ -29,7 +28,7 @@ class SQLiteCache:
         connection (sqlite3.Connection): Database connection
     """
 
-    def __init__(self: SQLiteCache, path: Path | None = None, expiry: int | None = 14):
+    def __init__(self, path: Optional[Path] = None, expiry: Optional[int] = 14):
         self.expiry = expiry
         self.connection = sqlite3.connect(path or get_cache_root() / "cache.sqlite")
         self.connection.row_factory = sqlite3.Row
@@ -37,7 +36,7 @@ class SQLiteCache:
         self.connection.execute("CREATE TABLE IF NOT EXISTS queries (query, response, query_date);")
         self.delete()
 
-    def select(self: SQLiteCache, query: str) -> dict[str, Any]:
+    def select(self, query: str) -> dict[str, Any]:
         """Retrieve data from the cache database.
 
         Args:
@@ -57,7 +56,7 @@ class SQLiteCache:
             return json.loads(results["response"])
         return {}
 
-    def insert(self: SQLiteCache, query: str, response: dict[str, Any]) -> None:
+    def insert(self, query: str, response: dict[str, Any]) -> None:
         """Insert data into the cache database.
 
         Args:
@@ -74,7 +73,7 @@ class SQLiteCache:
         )
         self.connection.commit()
 
-    def delete(self: SQLiteCache) -> None:
+    def delete(self) -> None:
         """Remove all expired data from the cache database."""
         if not self.expiry:
             return

@@ -6,15 +6,15 @@ This module provides the following classes:
 - GenericCover
 """
 
-from __future__ import annotations
-
 __all__ = ["GenericComic", "GenericCover"]
-from datetime import date, datetime
 
-from pydantic import Field, field_validator
+from datetime import date, datetime
+from typing import Annotated, Optional
+
+from pydantic import BeforeValidator, Field
 
 from himon.schemas import BaseModel
-from himon.schemas._validators import to_bool, to_optional_float, to_optional_int, to_optional_str
+from himon.schemas._validators import ensure_bool, ensure_date, ensure_float, ensure_int, ensure_str
 
 
 class GenericComic(BaseModel):
@@ -26,10 +26,20 @@ class GenericComic(BaseModel):
         description: Description of the Issue.
         format: Type of Issue.
         id: Identifier used by League of Comic Geeks.
+        is_collected:
+        is_enabled:
+        is_pulled:
+        is_read:
         is_variant: Issue has been marked as Variant.
+        is_wished:
+        key_level:
+        my_pick:
+        my_rating:
+        my_rating_dec:
         parent_id: If it is a variant Issue, id of the original Issue, else None.
         parent_title: If it is a variant Issue, title of the original Issue, else None.
         price: Price of the Issue.
+        pull_count:
         publisher_id: The publisher id of the Issue.
         publisher_name: The publisher name of the Issue.
         release_date: The date the Issue was released.
@@ -42,43 +52,34 @@ class GenericComic(BaseModel):
     """
 
     cover: int
+    date_foc: Annotated[Optional[date], BeforeValidator(ensure_date)] = None
     date_modified: datetime
-    description: str | None = None
+    description: Annotated[Optional[str], BeforeValidator(ensure_str)] = None
     format: str
     id: int
-    is_variant: bool = Field(alias="variant")
-    parent_id: int | None = None
-    parent_title: str | None = None
-    price: float | None = None
+    is_collected: Annotated[bool, Field(alias="collected"), BeforeValidator(ensure_bool)]
+    is_enabled: Annotated[bool, Field(alias="enabled"), BeforeValidator(ensure_bool)]
+    is_pulled: Annotated[bool, Field(alias="pulled"), BeforeValidator(ensure_bool)]
+    is_read: Annotated[bool, Field(alias="readlist"), BeforeValidator(ensure_bool)]
+    is_variant: Annotated[bool, Field(alias="variant"), BeforeValidator(ensure_bool)]
+    is_wished: Annotated[bool, Field(alias="wishlist"), BeforeValidator(ensure_bool)]
+    key_level: str
+    my_pick: Optional[str] = None
+    my_rating: Optional[str] = None
+    my_rating_dec: Optional[str] = None
+    parent_id: Annotated[Optional[int], BeforeValidator(ensure_int)] = None
+    parent_title: Annotated[Optional[str], BeforeValidator(ensure_str)] = None
+    price: Annotated[Optional[float], BeforeValidator(ensure_float)] = None
     publisher_id: int
     publisher_name: str
+    pull_count: int = Field(alias="count_pulls")
     release_date: date = Field(alias="date_release")
     series_begin: int
-    series_end: int | None = None
+    series_end: Annotated[Optional[int], BeforeValidator(ensure_int)] = None
     series_id: int
     series_name: str
-    series_volume: int | None = None
+    series_volume: Annotated[Optional[int], BeforeValidator(ensure_int)] = None
     title: str
-
-    @field_validator("is_variant", mode="before")
-    def _to_bool(cls: type[GenericComic], v: str) -> bool:
-        """Pydantic validator to convert a Str 0/1 to a bool."""
-        return to_bool(v)
-
-    @field_validator("price", mode="before")
-    def _to_optional_float(cls: type[GenericComic], v: str) -> float | None:
-        """Pydantic validator to convert a Str or 0 to None or return value."""
-        return to_optional_float(v)
-
-    @field_validator("parent_id", "series_volume", "series_end", mode="before")
-    def _to_optional_int(cls: type[GenericComic], v: str) -> int | None:
-        """Pydantic validator to convert a Str or 0 to None or return value."""
-        return to_optional_int(v)
-
-    @field_validator("description", "parent_title", mode="before")
-    def _to_optional_str(cls: type[GenericComic], v: str) -> str | None:
-        """Pydantic validator to convert a Str to None or return html stripped value."""
-        return to_optional_str(v)
 
 
 class GenericCover(GenericComic):

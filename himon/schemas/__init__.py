@@ -16,6 +16,6 @@ class BaseModel(
     str_strip_whitespace=True,
     validate_assignment=True,
     revalidate_instances="always",
-    extra="ignore",
+    extra="forbid",
 ):
     """Base model for himon resources."""
