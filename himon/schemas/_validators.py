@@ -1,12 +1,12 @@
-__all__ = ["ensure_bool", "ensure_date", "ensure_float", "ensure_int", "ensure_str"]
+__all__ = ["validate_bool", "validate_date", "validate_decimal", "validate_int", "validate_str"]
 
 import html
 import re
 from datetime import date, datetime
-from typing import Optional
+from decimal import Decimal
 
 
-def ensure_bool(value: str) -> bool:
+def validate_bool(value: str) -> bool:
     """Convert a Str 0/1 to a bool.
 
     Args:
@@ -23,7 +23,7 @@ def ensure_bool(value: str) -> bool:
     raise ValueError("Unknown bool value `%s`.", value)
 
 
-def ensure_date(value: str) -> Optional[date]:
+def validate_date(value: str) -> date | None:
     """Convert a Str or 0 to None or return date.
 
     Args:
@@ -39,25 +39,25 @@ def ensure_date(value: str) -> Optional[date]:
         return None
 
 
-def ensure_float(value: str) -> Optional[float]:
-    """Convert a Str or 0 to None or return float.
+def validate_decimal(value: str) -> Decimal | None:
+    """Convert a Str or 0 to None or return Decimal.
 
     Args:
         value: Value to convert
     Return:
-        Value mapped as None or float
+        Value mapped as None or Decimal
     """
     if value:
         value = str(value).replace("..", ".")
     try:
         if not value or float(value) == 0:
             return None
-        return float(value)
+        return Decimal(value)
     except ValueError:
         return None
 
 
-def ensure_int(value: str) -> Optional[int]:
+def validate_int(value: str) -> int | None:
     """Convert a Str or 0 to None or return int.
 
     Args:
@@ -73,7 +73,7 @@ def ensure_int(value: str) -> Optional[int]:
         return None
 
 
-def ensure_str(value: str) -> Optional[str]:
+def validate_str(value: str) -> str | None:
     """Convert a Str to None or return html stripped value.
 
     Args:

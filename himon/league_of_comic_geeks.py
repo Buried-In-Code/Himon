@@ -8,7 +8,7 @@ This module provides the following classes:
 __all__ = ["LeagueofComicGeeks"]
 
 import platform
-from typing import Any, Optional
+from typing import Any
 from urllib.parse import urlencode
 
 from pydantic import TypeAdapter, ValidationError
@@ -55,9 +55,9 @@ class LeagueofComicGeeks:
         self,
         client_id: str,
         client_secret: str,
-        access_token: Optional[str] = None,
+        access_token: str | None = None,
         timeout: int = 30,
-        cache: Optional[SQLiteCache] = None,
+        cache: SQLiteCache | None = None,
     ):
         self.headers = {
             "Accept": "application/json",
@@ -73,7 +73,7 @@ class LeagueofComicGeeks:
     @sleep_and_retry
     @limits(calls=20, period=MINUTE)
     def _perform_get_request(
-        self, url: str, params: Optional[dict[str, str]] = None
+        self, url: str, params: dict[str, str] | None = None
     ) -> dict[str, Any]:
         """Make GET request to League of Comic Geeks.
 
@@ -110,7 +110,7 @@ class LeagueofComicGeeks:
             raise ServiceError("Service took too long to respond") from err
 
     def _get_request(
-        self, endpoint: str, params: Optional[dict[str, str]] = None, skip_cache: bool = False
+        self, endpoint: str, params: dict[str, str] | None = None, skip_cache: bool = False
     ) -> dict[str, Any]:
         """Check cache or make GET request to League of Comic Geeks.
 
@@ -146,7 +146,7 @@ class LeagueofComicGeeks:
 
     @sleep_and_retry
     @limits(calls=20, period=MINUTE)
-    def _str_get_request(self, endpoint: str, params: Optional[dict[str, str]] = None) -> str:
+    def _str_get_request(self, endpoint: str, params: dict[str, str] | None = None) -> str:
         """Make GET request to League of Comic Geeks, expecting a str response.
 
         Args:

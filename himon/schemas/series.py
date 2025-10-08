@@ -8,12 +8,12 @@ This module provides the following classes:
 __all__ = ["Series"]
 
 from datetime import datetime
-from typing import Annotated, Optional
+from typing import Annotated
 
 from pydantic import BeforeValidator, Field
 
 from himon.schemas import BaseModel
-from himon.schemas._validators import ensure_bool, ensure_int, ensure_str
+from himon.schemas._validators import validate_bool, validate_int, validate_str
 
 
 class Series(BaseModel):
@@ -28,6 +28,7 @@ class Series(BaseModel):
         first_issue_id: ID of the first Issue in the Series.
         id: Identifier used by League of Comic Geeks.
         is_enabled:
+        language_id:
         map_to_id:
         publisher_id: The publisher id of the Series.
         publisher_name: The publisher name of the Series.
@@ -35,6 +36,7 @@ class Series(BaseModel):
         series_string: String showing the year period for this Series.
         title: Name / Title of the Series.
         title_sort: The sort name of the Series.
+        type_id:
         volume: Volume number.
         year_begin: The year the Series started.
         year_end: The year the Series ended.
@@ -44,10 +46,11 @@ class Series(BaseModel):
     cover_id: int = Field(alias="cover")
     date_added: datetime
     date_modified: datetime
-    description: Annotated[Optional[str], BeforeValidator(ensure_str)] = None
+    description: Annotated[str | None, BeforeValidator(validate_str)] = None
     first_issue_id: int = Field(alias="comic_id")
     id: int
-    is_enabled: Annotated[bool, Field(alias="enabled"), BeforeValidator(ensure_bool)]
+    is_enabled: Annotated[bool, Field(alias="enabled"), BeforeValidator(validate_bool)]
+    language_id: int
     map_to_id: int
     publisher_id: int
     publisher_name: str
@@ -55,6 +58,7 @@ class Series(BaseModel):
     series_string: str
     title: str
     title_sort: str
-    volume: Annotated[Optional[int], BeforeValidator(ensure_int)] = None
+    type_id: int
+    volume: Annotated[int | None, BeforeValidator(validate_int)] = None
     year_begin: int
-    year_end: Annotated[Optional[int], BeforeValidator(ensure_int)] = None
+    year_end: Annotated[int | None, BeforeValidator(validate_int)] = None

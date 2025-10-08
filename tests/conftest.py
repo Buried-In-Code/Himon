@@ -3,9 +3,8 @@
 This module contains pytest fixtures.
 """
 
-from __future__ import annotations
-
 import os
+from pathlib import Path
 
 import pytest
 
@@ -38,7 +37,7 @@ def session(client_id: str, client_secret: str, access_token: str | None) -> Lea
         client_id=client_id,
         client_secret=client_secret,
         access_token=access_token,
-        cache=SQLiteCache("tests/cache.sqlite", expiry=None),
+        cache=SQLiteCache(path=Path("tests/cache.sqlite"), expiry=None),
     )
     if not access_token:
         service.access_token = service.generate_access_token()
