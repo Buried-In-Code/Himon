@@ -5,10 +5,10 @@ This module contains tests for Series objects.
 
 from datetime import datetime
 
-from himon.league_of_comic_geeks import LeagueofComicGeeks
+from himon.league_of_comic_geeks import LeagueOfComicGeeks
 
 
-def test_get_series(session: LeagueofComicGeeks) -> None:
+def test_get_series(session: LeagueOfComicGeeks) -> None:
     """Test using the series endpoint with a valid series_id."""
     result = session.get_series(series_id=100096)
     assert result is not None

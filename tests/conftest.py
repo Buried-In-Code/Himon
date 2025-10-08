@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from himon.league_of_comic_geeks import LeagueofComicGeeks
+from himon.league_of_comic_geeks import LeagueOfComicGeeks
 from himon.sqlite_cache import SQLiteCache
 
 
@@ -31,9 +31,9 @@ def access_token() -> str | None:
 
 
 @pytest.fixture(scope="session")
-def session(client_id: str, client_secret: str, access_token: str | None) -> LeagueofComicGeeks:
+def session(client_id: str, client_secret: str, access_token: str | None) -> LeagueOfComicGeeks:
     """Set the Himon session fixture."""
-    service = LeagueofComicGeeks(
+    service = LeagueOfComicGeeks(
         client_id=client_id,
         client_secret=client_secret,
         access_token=access_token,

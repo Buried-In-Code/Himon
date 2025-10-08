@@ -6,11 +6,11 @@ This module contains tests for SearchResult objects.
 from datetime import date
 from decimal import Decimal
 
-from himon.league_of_comic_geeks import LeagueofComicGeeks
+from himon.league_of_comic_geeks import LeagueOfComicGeeks
 from himon.schemas.generic import ComicFormat
 
 
-def test_search(session: LeagueofComicGeeks) -> None:
+def test_search(session: LeagueOfComicGeeks) -> None:
     """Test using the search endpoint with a valid comic title."""
     results = session.search(search_term="Blackest Night #1")
     assert len(results) != 0

@@ -8,12 +8,12 @@ from decimal import Decimal
 
 from pydantic import HttpUrl
 
-from himon.league_of_comic_geeks import LeagueofComicGeeks
+from himon.league_of_comic_geeks import LeagueOfComicGeeks
 from himon.schemas.comic import CharacterType, KeyEventType
 from himon.schemas.generic import ComicFormat, CoverType
 
 
-def test_get_comic(session: LeagueofComicGeeks) -> None:  # noqa: PLR0915
+def test_get_comic(session: LeagueOfComicGeeks) -> None:  # noqa: PLR0915
     """Test using the comic endpoint with a valid comic_id."""
     result = session.get_comic(comic_id=2710631)
     assert result is not None
@@ -152,7 +152,7 @@ def test_get_comic(session: LeagueofComicGeeks) -> None:  # noqa: PLR0915
     assert result.count_read == 3006
 
 
-def test_upc_alpha_only(session: LeagueofComicGeeks) -> None:
+def test_upc_alpha_only(session: LeagueOfComicGeeks) -> None:
     """Test the comic endpoint with a comic that has an invalid character in the upc."""
     result = session.get_comic(comic_id=6257084)
     assert result is not None

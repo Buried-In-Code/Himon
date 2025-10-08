@@ -15,6 +15,7 @@ docs = [
 tests = [
   "pytest >= 8.4.0",
   "pytest-cov >= 7.0.0",
+  "pytest-httpx >= 0.35.0",
   "tox >= 4.30.0",
   "tox-uv >= 1.28.0"
 ]
@@ -40,9 +41,9 @@ classifiers = [
   "Typing :: Typed"
 ]
 dependencies = [
+  "httpx >= 0.28.0",
   "pydantic >= 2.12.0",
-  "ratelimit >= 2.2.0",
-  "requests >= 2.32.0"
+  "pyrate-limiter >= 3.9.0"
 ]
 description = "A Python wrapper for League of Comic Geeks."
 dynamic = ["version"]
