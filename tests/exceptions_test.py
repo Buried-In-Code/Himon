@@ -6,12 +6,12 @@ This module contains tests for Exceptions.
 import pytest
 
 from himon.exceptions import AuthenticationError, ServiceError
-from himon.league_of_comic_geeks import LeagueofComicGeeks
+from himon.league_of_comic_geeks import LeagueOfComicGeeks
 
 
 def test_unauthorized() -> None:
     """Test generating an AuthenticationError."""
-    session = LeagueofComicGeeks(
+    session = LeagueOfComicGeeks(
         client_id="Invalid",
         client_secret="Invalid",  # noqa: S106
         access_token=None,
@@ -21,7 +21,7 @@ def test_unauthorized() -> None:
         session.get_comic(comic_id=1)
 
 
-def test_not_found(session: LeagueofComicGeeks) -> None:
+def test_not_found(session: LeagueOfComicGeeks) -> None:
     """Test a 404 Not Found raises a ServiceError."""
     with pytest.raises(ServiceError):
         session._get_request(endpoint="/invalid")  # noqa: SLF001
@@ -29,7 +29,7 @@ def test_not_found(session: LeagueofComicGeeks) -> None:
 
 def test_timeout(client_id: str, client_secret: str, access_token: str | None) -> None:
     """Test a TimeoutError for slow responses."""
-    session = LeagueofComicGeeks(
+    session = LeagueOfComicGeeks(
         client_id=client_id,
         client_secret=client_secret,
         access_token=access_token,

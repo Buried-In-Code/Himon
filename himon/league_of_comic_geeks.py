@@ -2,10 +2,10 @@
 
 This module provides the following classes:
 
-- LeagueofComicGeeks
+- LeagueOfComicGeeks
 """
 
-__all__ = ["LeagueofComicGeeks"]
+__all__ = ["LeagueOfComicGeeks"]
 
 import platform
 from json import JSONDecodeError
@@ -60,7 +60,7 @@ def format_time(seconds: str | float) -> str:
     return ", ".join(parts)
 
 
-class LeagueofComicGeeks:
+class LeagueOfComicGeeks:
     """Wrapper to allow calling League of Comic Geeks API endpoints.
 
     Args:
@@ -75,7 +75,7 @@ class LeagueofComicGeeks:
         access_token (str | None): User's Access Token to access League of Comic Geeks.
     """
 
-    _minute_rate = Rate(MINUTE_RATE, Duration.HOUR)
+    _minute_rate = Rate(MINUTE_RATE, Duration.MINUTE)
     _rates: ClassVar[list[Rate]] = [_minute_rate]
     _bucket = SQLiteBucket.init_from_file(_rates)  # Save between sessions
     # Can a `BucketFullException` be raised when used as a decorator?
@@ -87,7 +87,7 @@ class LeagueofComicGeeks:
         client_id: str,
         client_secret: str,
         access_token: str | None = None,
-        timeout: int = 30,
+        timeout: float = 30,
         cache: SQLiteCache | None = None,
     ):
         self._client = Client(

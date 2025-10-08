@@ -25,10 +25,15 @@ pip install --user Himon
 ### Example Usage
 
 ```python
-from himon.league_of_comic_geeks import LeagueofComicGeeks
+from himon.league_of_comic_geeks import LeagueOfComicGeeks
 from himon.sqlite_cache import SQLiteCache
 
-session = LeagueofComicGeeks(client_id="Client Id", client_secret="Client Secret", access_token=None, cache=SQLiteCache())
+session = LeagueOfComicGeeks(
+    client_id="Client Id",
+    client_secret="Client Secret",
+    access_token=None,
+    cache=SQLiteCache()
+)
 
 # Generate an access token if not supplied
 if not session.access_token:
